@@ -1,0 +1,57 @@
+sequenceDiagram
+    autonumber
+    participant CU as Customer
+    participant CH as Messaging channel
+    participant VO as Voice channel
+    participant AG as AI Agent
+    participant ME as Memory
+    participant KB as Knowledge
+    participant SR as System of record
+    participant HD as Human desk
+    participant IN as Insights
+
+    rect rgb(235, 242, 255)
+    Note over CU,ME: Beat 1 - Recognized cold open
+    CU->>CH: First message
+    CH->>AG: Inbound message
+    AG->>ME: Look up profile by phone
+    ME-->>AG: Name + prior interaction
+    AG-->>CU: Greets by name, references prior interaction
+    end
+
+    rect rgb(235, 255, 240)
+    Note over CU,KB: Beat 2 - Grounded answer
+    CU->>AG: Factual question
+    AG->>KB: Search top-k 3
+    KB-->>AG: Relevant passages
+    AG-->>CU: Answer with figures verbatim
+    end
+
+    rect rgb(255, 245, 230)
+    Note over CU,SR: Beat 3 - Wow moment
+    CU->>AG: Requests the action
+    AG-->>CU: Confirms details
+    CU->>AG: Yes
+    AG->>SR: Mutate record
+    SR-->>AG: New state + reference id
+    AG->>ME: Write observation, past tense, dated
+    AG-->>CU: Result with reference id
+    end
+
+    rect rgb(245, 235, 255)
+    Note over CU,VO: Beat 4 - Continuity moment
+    AG-->>CU: Offers channel switch
+    CU->>VO: Switches channel
+    VO->>AG: Same conversation, new channel
+    AG-->>CU: First turn references the Beat 3 action
+    opt Escalation
+    AG->>HD: Handoff with reason + context
+    HD-->>CU: Human continues without re-asking
+    end
+    end
+
+    rect rgb(240, 240, 240)
+    Note over AG,IN: Beat 5 - Insight close
+    AG->>IN: Conversation ended
+    IN-->>IN: Summary, sentiment, adherence, custom score
+    end

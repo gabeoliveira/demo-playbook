@@ -1,0 +1,13 @@
+{
+  "name": "demo-playbook",
+  "owner": {
+    "name": "Gabriel Oliveira"
+  },
+  "plugins": [
+    {
+      "name": "demo-playbook",
+      "source": "./",
+      "description": "Demo + POC workflows for conversational AI, with codified guardrails."
+    }
+  ]
+}
