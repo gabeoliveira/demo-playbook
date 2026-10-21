@@ -1,6 +1,6 @@
 ---
 name: build-demo
-description: Build a conversational-AI customer demo the proven way. Fit the customer's use case into the one-story arc (recognized customer → grounded answer → real action → continuity moment → insight close), drive the build draft-first (propose, don't interrogate), and ship the deliverables that make it runnable by a teammate and rebuildable in ~30 min. Those are a sequence diagram, demo script, SETUP.md, customer recipe page, and provision/teardown scripts, plus optional companions (architecture board, customer-language journey walkthrough, no-code recreation prompt). Use when someone wants to build, plan or prepare a demo of an AI agent for a customer. NOT for POCs (use frame-poc).
+description: Build a conversational-AI customer demo the proven way. Fit the customer's use case into the one-story arc (recognized customer → grounded answer → real action → continuity moment → insight close), drive the build draft-first (propose, don't interrogate), and ship the deliverables that make it runnable by a teammate and rebuildable in ~30 min. Those are a sequence diagram, demo script, SETUP.md, customer recipe page, and provision/teardown scripts, plus companions when the situation calls for them (architecture board, customer-language journey walkthrough, builder prompts for the platform's AI or no-code builder). Use when someone wants to build, plan or prepare a demo of an AI agent for a customer. NOT for POCs (use frame-poc).
 ---
 
 # Build a demo
@@ -16,6 +16,8 @@ reference files.
    rows are still `TODO`, say which ones block this demo and ask.
 3. `PLATFORM_NOTES.md` (team repo or plugin root) if it exists. These are the platform's known gotchas.
 4. `${CLAUDE_PLUGIN_ROOT}/reference/prompt-skeleton.md` when you reach step 5.
+5. `${CLAUDE_PLUGIN_ROOT}/reference/production-path.md` when the agent must reach production, or when
+   the platform has an AI builder (step 6).
 
 ## The shape (never skip)
 
@@ -38,6 +40,11 @@ Rules of the shape:
 - If the use case won't fit the shape, say so. Adapt the specifics, or recommend a different use
   case. **A feature catalog is not a demo.**
 - If the platform can't do a beat (see PRODUCT_MAP), flip the arc honestly. Don't fake the beat.
+- **Optional proof segment after the insight close (~2 min)**, for an audience that will run the
+  agent or answers to a regulator: one live guardrail moment, then the golden set's pass rate and
+  the version's traffic split (principles §A). Otherwise it goes in the recipe page.
+- **An insight close "at scale" needs history.** A fresh account has none: seed it by script and
+  say on stage that it's synthetic (principles §D).
 
 ## Give them a running start
 
@@ -78,7 +85,11 @@ People lose time staring at empty fields. Ask only what only they know, then han
    constraints section already citing their regulator. Hand over a full draft, not a form. If the
    customer will see the prompt during the demo, write it (and the tool descriptions) in their
    language from the start (principles §I).
-6. **Rehearse.** At least 3× against a stopwatch, with a scripted reset between runs.
+6. **Path to production** (when the agent must go live, or the platform has an AI builder). Route
+   each artifact by `reference/production-path.md`: code through Git, flat config through the
+   API, builder-only definitions through builder prompts from the spec (`reference/artifacts.md`
+   §4a), with the gates in that file.
+7. **Rehearse.** At least 3× against a stopwatch, with a scripted reset between runs.
 
 The user should be editing and rejecting, never writing from blank.
 
@@ -118,8 +129,9 @@ The user should be editing and rejecting, never writing from blank.
 7. **Journey walkthrough** whenever the demo is shared with the customer before demo day. It is
    **in the customer's language**, uses the real smoke-test dialogue, and maps their briefing
    challenges to beat numbers.
-8. **No-code recreation prompt** if the platform has a fast no-code builder. It's a
-   description-to-demo input that recreates the demo there, and it states the deltas honestly.
+8. **Builder prompts** whenever the platform has an AI builder (required then, because they're how
+   the agent gets built), or a no-code recreation when the demo should be rerunnable without the
+   code. Both state the deltas honestly.
 
 Specs for 6–8 are in `reference/artifacts.md`.
 

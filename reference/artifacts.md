@@ -45,7 +45,7 @@ Internal library material. Sections, in order:
    stays in the demo's locale. When the prompt was written in the customer's language (because the
    customer sees it, principles §I), render the English copy and say which file is the source of
    truth.
-8. **No-code recreation** section, when one exists.
+8. **Builder prompts** (§4): the production build set and/or the no-code recreation, when they exist.
 9. **Repo state and action items**: a table of what exists, what's missing, and who owns it.
 
 Validate every Mermaid block before publishing.
@@ -78,10 +78,39 @@ session predictable for them.
 - **End by mapping the customer's own briefing challenges to beat numbers.** This is what shows
   them they were heard.
 
-## 4. No-code recreation prompt (when the platform has a no-code or fast builder)
+## 4. Builder prompts (when the platform has an AI builder or a no-code builder)
 
-A description-to-demo input that recreates the demo on the fast builder, so others can rerun it
-without the code. Structure:
+Prompts that turn the written spec into the platform's build. There are two uses, and a demo may
+need either or both.
+
+### 4a. Production build (AI builder): the default when one exists
+
+The spec in our repo, plus these prompts, should be enough for a teammate to rebuild the agent.
+The method and gates are in `reference/production-path.md`. A numbered set, one prompt per thread:
+
+0. **Standing instructions** for the builder (its project or vault file, if it has one): the
+   customer's language for everything customer-facing, "copy the spec verbatim, never translate or
+   reword", protected resource names, and capabilities that must never be created (for example,
+   "no unlock tool").
+1. **Build** each definition the platform says not to hand-write, attaching the spec files. Start
+   with "copy verbatim", exact tool names, and "if a referenced tool doesn't exist, stop and list
+   it". End with "run a conflict check before creating anything".
+2. **Conflict and coverage check** after the build: contradictions, forbidden paths, wrong tool
+   calls, branches with no exit. Report only, no changes.
+3. **Golden set**: the scenario list from the demo plan, with mocked tool outputs and one assertion
+   per forbidden behavior.
+4. **Monitors**: the QA rubric and flag criteria the insight close shows.
+5. **Verification**: trace, legally sensitive lines, guardrails, diff since the last version. Run
+   before every publish.
+6. **Live analyst questions** for the insight close, in the customer's language, if the builder can
+   answer questions about the data.
+
+Build tools before definitions, so the builder references real tools. Use the builder's strongest
+reasoning mode for building.
+
+### 4b. No-code recreation: when the demo should be rerunnable without the code
+
+A description-to-demo input that recreates the demo on the fast builder. Structure:
 
 1. Goal
 2. Persona
@@ -94,4 +123,6 @@ without the code. Structure:
 9. Rehearsal notes
 
 Map each custom tool to the nearest built-in and **state the delta**. When the wow moment doesn't
-reproduce, name it and flip the arc. Don't imitate it. Mirror this section into the recipe page.
+reproduce, name it and flip the arc. Don't imitate it.
+
+Mirror whichever of 4a/4b exists into the recipe page (section 8).

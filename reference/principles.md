@@ -23,6 +23,10 @@ ahead: these are defaults, not locks.
 - **Optional wow beats must earn their stage time.** An identity step-up before a sensitive action
   is worth ~20 s only to a regulated or security-minded audience, and only when it gates an
   action the demo already contains. Default demos skip it.
+- **A guardrail moment is the same kind of optional beat.** About 30 s: one live adversarial line
+  (an authority-spoofing or prompt-injection attempt aimed at the demo's own risky action), the
+  refusal, and the audit-log entry on screen. It earns its time with a regulated audience. Rehearse
+  the near-misses too: genuine domain words ("reverse the charge") can trip manipulation detectors.
 
 ## B. Agent design
 
@@ -77,6 +81,13 @@ ahead: these are defaults, not locks.
   logic.** Read the platform's per-call event timeline before touching code.
 
 ## D. Rehearsal and state hygiene
+
+- **Analytics need volume, so seed history by script.** Dashboards, intent clustering and
+  monitors look empty on a fresh account. Generate synthetic conversations from a deterministic
+  script in the customer's language, upload them, and mark every one (a metadata key and a
+  user-id prefix) so teardown deletes only those. **Say on stage that it's synthetic**, and never
+  present it as the customer's data. Signals that tools emit at runtime can't be seeded: they fill
+  from real runs.
 
 - **Rehearse at least 3× against a stopwatch, with a scripted reset between runs.**
 - **Reset order: close open sessions → purge runtime memory → reseed.**
@@ -207,4 +218,6 @@ ahead: these are defaults, not locks.
 | "Reuse one agent config across two brands or use cases." | Duplicate it per use case. | Tool descriptions and constraints are use-case-specific. |
 | "This mechanism question needs the full 7-tab POC." | Scope a feasibility spike instead. | The 7 tabs exist to produce a Go/No-Go for paid work. |
 | "We'll do the risky send for the first time on stage." | Smoke-test it, and wire a plain fallback. | First-time sends on demo day are how error codes reach the stage. |
+| "Just ask the AI builder to make the agent from a chat description." | Prompt it from the written spec, with a conflict check and a human diff review (production-path §2). | An unreviewed generation can't be reproduced, diffed or audited. |
+| "Show the dashboard numbers, they look real." | Label seeded history as synthetic on stage (§D). | The first follow-up question exposes it, and trust goes with it. |
 | "Bulk-close everything on the shared sender." | Select by our own markers, with a named target. | §E: closed is final, and other teams live there too. |

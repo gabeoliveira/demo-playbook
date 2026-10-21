@@ -23,7 +23,8 @@ employer, by design.
 | [`skills/frame-poc/`](skills/frame-poc/SKILL.md) | `/frame-poc`: the 7-tab POC framework plus metric-trap reframes, and the smaller feasibility-spike variant. |
 | [`reference/principles.md`](reference/principles.md) | The guardrails: rules that each started as a real correction. |
 | [`reference/prompt-skeleton.md`](reference/prompt-skeleton.md) | Annotated system-prompt skeleton. |
-| [`reference/artifacts.md`](reference/artifacts.md) | Specs for the recipe page, architecture board, journey walkthrough and no-code recreation prompt. |
+| [`reference/artifacts.md`](reference/artifacts.md) | Specs for the recipe page, architecture board, journey walkthrough and builder prompts (production build and no-code recreation). |
+| [`reference/production-path.md`](reference/production-path.md) | From a written spec to a live agent: route each artifact deterministically, the gates, publish at 0% and ramp, rollback. |
 | [`PRODUCT_MAP.md`](PRODUCT_MAP.md) | Capability → product slots. **Fill during onboarding.** |
 | [`templates/`](templates/) | DEMO_SCRIPT, SETUP, sequence diagram, POC tabs, PLATFORM_NOTES, and a generic `lifecycle.ts` stage runner. |
 | [`memory/working-style.md`](memory/working-style.md) | Preferences and lessons to seed a fresh Claude memory. |

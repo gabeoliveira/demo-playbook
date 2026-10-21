@@ -25,7 +25,11 @@ How to fill a row:
 | **Post-conversation insights** | Summary, sentiment, QA/adherence scoring, custom scoring. The insight close. | _TODO_ | | |
 | **Templates / approvals** | Outbound messages that need pre-approval (lead time). | _TODO_ | | |
 | **Hosting** | Where the demo app runs. Pick the region closest to the voice infrastructure, not the user. | _TODO_ | | |
-| **No-code builder** | A fast path when the wow moment needs no custom tool. | _TODO_ (if any) | | |
+| **AI builder / no-code builder** | Builds or edits the agent from a prompt: the route for definitions the platform says not to hand-write. Also a fast path when the wow moment needs no custom tool. | _TODO_ (if any) | | |
+| **Config-as-code and versioning** | Where the build lives (Git format, environments, branches), how a version is published, how traffic ramps, and how rollback works. | _TODO_ | | |
+| **Guardrails / safety layer** | Built-in protections (manipulation detection, action validation) plus custom input/output rules. The guardrail moment. | _TODO_ | | |
+| **Evals and monitors** | Golden-set simulations, QA rubrics, recurring monitors. The proof segment and the production gates. | _TODO_ | | |
+| **Analytics at volume** | Dashboards, intents and charts that need history, and the supported way to seed synthetic history (and delete it by marker). | _TODO_ | | |
 | **Observability** | Where to read the wire when something breaks: event timelines, per-leg errors. | _TODO_ | | |
 
 ## Onboarding questions to answer
@@ -42,6 +46,13 @@ How to fill a row:
   persona, and what is async (extraction lag)?
 - Where is the per-leg error timeline when voice misbehaves?
 - Is there a sandbox or demo account shared with teammates? (If so, see principles §E.)
+- Which artifacts have a Git format, which have a public API, and which can only be made in the
+  console or by the AI builder? (This decides each artifact's route in `reference/production-path.md`.)
+- How is a version published, how does traffic ramp, and how do you roll back without a redeploy?
+- Which guardrails are built in and always on, and what does a custom guardrail look like? Where
+  does a fired guardrail show up (audit log, trace)?
+- How much history do dashboards, intents and monitors need before they show anything, and how
+  do SEs seed and later delete synthetic history?
 
 ## Mapping a previous demo onto this platform
 
