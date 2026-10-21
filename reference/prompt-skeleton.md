@@ -8,6 +8,10 @@ If the platform splits the prompt into fields (for example "context" vs "instruc
 procedures layer), keep the same sections and distribute them. Identity, tone and constraints
 usually go in context. Tasks and tool procedures usually go in instructions or procedures.
 
+The skeleton is in English. If the customer will see the prompt during the demo, write the final
+prompt in their language and translate the section headings too (principles §I). Keep
+`<<tool_name>>` references and other code identifiers as they are.
+
 ```markdown
 - All responses MUST be in <<language>>.
 

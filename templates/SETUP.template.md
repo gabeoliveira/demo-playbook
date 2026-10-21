@@ -28,7 +28,6 @@ to read the source to follow it.
 - [ ] <<Channel senders / numbers>> (sandbox is fine for rehearsal).
 - [ ] <<LLM key, if the platform doesn't host the model>>.
 - [ ] <<Hosting account + CLI>> · <<tunnel tool for local dev>> · Node 20+.
-- [ ] Airtable personal access token (if a simulated system of record is used).
 
 ## 2. Local environment
 

@@ -16,7 +16,7 @@ How to fill a row:
 | **Customer memory / profile** | Recognize the customer on message 1, recall prior interactions, write what just happened. | _TODO_ | | |
 | **Knowledge / grounding** | Answers verbatim from approved content: "no hallucination". | _TODO_ | | |
 | **Tools / actions** | The wow moment: a real state change in a system of record. | _TODO_ | | |
-| **Simulated system of record** | Stands in for the customer's CRM/core. Airtable keyed on phone, snake_case fields, works anywhere. | Airtable (default) | API | no |
+| **Simulated system of record** | Stands in for the customer's CRM/core. Mock data inside the demo's own backend: held in memory, seeded at boot, snake_case fields, with an admin reset route and a back-office page that shows rows change on screen. No external database. | Demo backend (default) | Deployed with the demo | no |
 | **Messaging channels** | Chat, WhatsApp, SMS, email: usually the cold open. | _TODO_ | | |
 | **Voice runtime** | ASR, TTS, turn-taking, interruption. Latency lives here. | _TODO_ | | |
 | **Channel-switch mechanism** | How the customer moves from one channel to another inside one story (button, link, callback). | _TODO_ | | |

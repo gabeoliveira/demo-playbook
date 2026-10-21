@@ -184,6 +184,14 @@ ahead: these are defaults, not locks.
   reuse. Say explicitly when a runtime prompt stays in the customer's locale.
 - **Customer-facing material is in the customer's language.** Mocks use **real dialogue from
   smoke tests**, never invented lines.
+- **A prompt the customer will see is customer-facing.** On some platforms the agent's
+  configuration is part of the demo: the prompt, procedures, guidelines and tool descriptions are
+  on screen. Then write them in the customer's language from the first draft, not as a translation
+  at the end. Code identifiers (tool names, metadata keys, enum values) stay as they are, because
+  they must match the code. The recipe page still renders the prompt in English: keep that copy
+  as a separate file, mark the customer-language file as the source of truth, and keep them in sync.
+  *Why:* a prompt in English on a Portuguese-speaking customer's screen reads as "not built for
+  you", and it's the part their compliance team reads first.
 - **Localize the deliverable and the grammar together.** Example: in Portuguese, "POC" is
   feminine (*a POC, da POC, esta POC*) because it stands for *prova de conceito*. Check acronym
   gender and agreement in every gendered language.

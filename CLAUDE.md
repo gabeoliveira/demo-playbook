@@ -35,6 +35,8 @@ I'm a solutions engineer who builds customer-facing demos and POCs for conversat
    and the scorecard is living. Disambiguate a brief's number before you reframe it.
 8. **Audience decides language.** Internal material is in English. Customer-facing material is in
    the customer's language, using the real dialogue from smoke tests and never invented lines.
+   That includes the agent's prompts, procedures and tool descriptions whenever the customer will
+   see them, for example on a platform whose configuration is shown during the demo.
 
 ## Preferences
 

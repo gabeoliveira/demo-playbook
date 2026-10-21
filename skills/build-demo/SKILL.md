@@ -75,7 +75,9 @@ People lose time staring at empty fields. Ask only what only they know, then han
    - Usually: read and write on the system of record, plus a "record customer signal" memory write.
    - Sometimes: channel-switch sender, image/document processing, new-customer registration.
 5. **Prompt.** Generate it from `reference/prompt-skeleton.md`, ~150–250 lines, with the
-   constraints section already citing their regulator. Hand over a full draft, not a form.
+   constraints section already citing their regulator. Hand over a full draft, not a form. If the
+   customer will see the prompt during the demo, write it (and the tool descriptions) in their
+   language from the start (principles §I).
 6. **Rehearse.** At least 3× against a stopwatch, with a scripted reset between runs.
 
 The user should be editing and rejecting, never writing from blank.

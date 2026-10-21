@@ -42,7 +42,9 @@ Internal library material. Sections, in order:
 5. **Sequence diagram**: the validated one from the demo.
 6. **Demo script**: the full script with its timing budget.
 7. **Complete system prompt, rendered in English.** State explicitly that the runtime prompt
-   stays in the demo's locale.
+   stays in the demo's locale. When the prompt was written in the customer's language (because the
+   customer sees it, principles §I), render the English copy and say which file is the source of
+   truth.
 8. **No-code recreation** section, when one exists.
 9. **Repo state and action items**: a table of what exists, what's missing, and who owns it.
 

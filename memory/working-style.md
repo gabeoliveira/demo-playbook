@@ -30,6 +30,9 @@ guessing: I'm often the bridge between the platform docs and the customer's real
 - **Internal material is in English; customer-facing material is in the customer's language,
   using real smoke-test dialogue.**
   *Why:* the audience decides the language.
+  *How to apply:* when the customer will see the agent's prompts, procedures or tool descriptions,
+  those are customer-facing too. Write them in the customer's language and keep an English copy only
+  for the recipe page.
 - **Mermaid must render.** Use space-free participant ids, and validate with mermaid-cli before
   shipping.
   *Why:* an unrendered diagram is not a deliverable.
