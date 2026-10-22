@@ -110,14 +110,24 @@ ahead: these are defaults, not locks.
 
 ## E. Shared environments: safety
 
+- **Additive only, always.** Everything a demo or POC puts on a platform is added alongside what's
+  there. Pre-existing configuration stays exactly as it was: guidelines, procedures, profiles,
+  team settings, published versions, files with content. When our spec overlaps or conflicts with
+  theirs, **our spec changes**. Need a different setting? Create a new resource of ours (a new
+  voice profile rather than editing the existing one). Teardown removes only what carries our
+  markers.
+- **Inventory before the first write.** On any account you didn't create, start with a read-only
+  inventory of what's there, and save it with the demo. It's the record of what "pre-existing"
+  means, and the input to the conflict check.
 - **Select cleanup targets by markers *we* put there**: our ids, our webhook URLs, our source
   tags, our name prefix. **Never select by "it uses my number or sender."** On a shared account
   that is never true. A real incident: a reset closed dozens of other teams' conversations, and
   closed was final.
 - **Destructive bulk actions need an explicit, named target** (`--target <id> --force`). Never
   default to "all".
-- **Before changing a shared resource's config, record its previous state**, so teardown restores
-  it instead of deleting it.
+- **If changing an existing resource looks unavoidable, it isn't additive: stop and ask its
+  owner.** Say what would change and why. Only with their OK, record the previous state first, so
+  teardown restores it instead of deleting it.
 - **Never delete a resource that's still attached to something live.** Re-point it first, and
   refuse otherwise.
 - **The runtime often reads what's attached to a shared config, not your env var.** If two demos
@@ -220,4 +230,5 @@ ahead: these are defaults, not locks.
 | "We'll do the risky send for the first time on stage." | Smoke-test it, and wire a plain fallback. | First-time sends on demo day are how error codes reach the stage. |
 | "Just ask the AI builder to make the agent from a chat description." | Prompt it from the written spec, with a conflict check and a human diff review (production-path §2). | An unreviewed generation can't be reproduced, diffed or audited. |
 | "Show the dashboard numbers, they look real." | Label seeded history as synthetic on stage (§D). | The first follow-up question exposes it, and trust goes with it. |
+| "Just tweak their existing guidelines so ours fit." | Add ours and adapt ours (§E: additive only). | It isn't our config to change, and an edit there quietly changes every other flow that uses it. |
 | "Bulk-close everything on the shared sender." | Select by our own markers, with a named target. | §E: closed is final, and other teams live there too. |

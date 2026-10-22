@@ -56,6 +56,9 @@ Never start from a blank page.
    `sequence` diagram, and `scripts/lifecycle.ts`.
 3. The **app** should be a thin overlay on the platform's SDK or starter, not something you write
    from scratch. A demo directory is: prompt + tools + knowledge + provisioning scripts + docs.
+4. **On an account you didn't create, inventory it first** (read-only) and save the inventory with
+   the demo. Everything you build is **additive**: keep all of what's there, and adapt your spec
+   to it (principles §E).
 
 ## The process: draft first (propose, don't interrogate)
 

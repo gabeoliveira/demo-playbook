@@ -5,7 +5,9 @@
  *
  * Shows the four patterns that matter:
  *   1. liveness check via GET (404 = stale)
- *   2. a shared resource re-pointed (and restored on teardown) instead of deleted
+ *   2. a shared resource re-pointed (and restored on teardown) instead of deleted. This is NOT
+ *      additive (principles §E): use it only with the resource owner's explicit OK. The default
+ *      is to create a resource of our own.
  *   3. a delete guard that refuses while something live still uses the resource
  *   4. keep-by-policy for approval-gated / shared things
  */

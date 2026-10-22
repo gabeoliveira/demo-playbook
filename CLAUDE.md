@@ -28,8 +28,9 @@ I'm a solutions engineer who builds customer-facing demos and POCs for conversat
    script, SETUP.md, recipe page, and the provision + teardown scripts.
 4. **Every state reset is scripted.** Close open sessions first, then purge, then reseed. Rehearse
    at least 3× against a stopwatch.
-5. **On shared environments, select by our own markers.** Never select by "it uses my number or
-   sender". Destructive bulk actions need an explicit, named target.
+5. **Additive only, and select by our own markers.** Never edit or delete what was on a platform
+   before us: add our own, marked, and adapt our spec to theirs. Never select by "it uses my number
+   or sender". Destructive bulk actions need an explicit, named target.
 6. **Compliance is load-bearing.** Cite the customer's real regulator in the agent's constraints.
 7. **A POC produces a decision.** Hypotheses are numbered, each product has one primary metric,
    and the scorecard is living. Disambiguate a brief's number before you reframe it.

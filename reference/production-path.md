@@ -9,6 +9,12 @@ The spec stays in our repo: prompt and procedures (in the customer's language wh
 principles §I), tool code, tool descriptions, knowledge, signal definitions, and the eval list.
 The platform holds the build.
 
+## 0. Additive only
+
+On an account you didn't create, take a read-only inventory first and save it. Everything after
+that **adds**: nothing that existed before is edited or deleted (principles §E). The builder's
+standing instructions say so too, and every conflict-check fix changes our spec, never theirs.
+
 ## 1. Route each artifact by the most deterministic path the platform offers
 
 | Kind of artifact | Preferred route | Why |

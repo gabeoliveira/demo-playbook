@@ -44,8 +44,13 @@ guessing: I'm often the bridge between the platform docs and the customer's real
 - **Shared-environment cleanup selects by OUR markers** (our ids, webhooks, source tags), never by
   "uses my sender or number".
   *Why:* a reset once closed dozens of other teams' conversations, and closed was final.
-  *How to apply:* destructive bulk actions need an explicit, named target. Record the previous
-  state before touching a shared config, so teardown can restore it.
+  *How to apply:* destructive bulk actions need an explicit, named target.
+- **Additive only, always.** Never edit or delete pre-existing platform config (guidelines,
+  procedures, profiles, settings). Add our own, marked, and adapt our spec to what's there.
+  *Why:* it isn't ours, and an edit to shared config quietly changes every other flow using it.
+  *How to apply:* inventory the account read-only before the first write. Where a change to an
+  existing resource looks unavoidable, stop and ask its owner. Only with their OK, record the
+  previous state so teardown can restore it.
 - **The runtime reads what's attached to a shared config, not the env var I set.**
   *Why:* the agent once greeted a customer as another demo's persona.
   *How to apply:* re-point the config and restart the app. Verify; don't assume.
