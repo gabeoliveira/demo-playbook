@@ -10,13 +10,16 @@ reference files.
 
 ## Load first
 
-1. `${CLAUDE_PLUGIN_ROOT}/reference/principles.md`: enforce it throughout and push back when a
+Paths in this file are relative to the plugin's root folder: two levels up from this file.
+In Claude Code that folder is `${CLAUDE_PLUGIN_ROOT}`. In Devin, it's the installed plugin's folder.
+
+1. `reference/principles.md`: enforce it throughout and push back when a
    request trips a rule.
-2. `${CLAUDE_PLUGIN_ROOT}/PRODUCT_MAP.md`: which product plays which role on this platform. If
+2. `PRODUCT_MAP.md`: which product plays which role on this platform. If
    rows are still `TODO`, say which ones block this demo and ask.
 3. `PLATFORM_NOTES.md` (team repo or plugin root) if it exists. These are the platform's known gotchas.
-4. `${CLAUDE_PLUGIN_ROOT}/reference/prompt-skeleton.md` when you reach step 5.
-5. `${CLAUDE_PLUGIN_ROOT}/reference/production-path.md` when the agent must reach production, or when
+4. `reference/prompt-skeleton.md` when you reach step 5.
+5. `reference/production-path.md` when the agent must reach production, or when
    the platform has an AI builder (step 6).
 
 ## The shape (never skip)
@@ -52,7 +55,7 @@ Never start from a blank page.
 
 1. If a previous demo on this platform exists, copy the most recent one with the closest shape. A
    recently shipped demo beats any template.
-2. Otherwise, assemble from `${CLAUDE_PLUGIN_ROOT}/templates/`: `DEMO_SCRIPT`, `SETUP`, the
+2. Otherwise, assemble from `templates/`: `DEMO_SCRIPT`, `SETUP`, the
    `sequence` diagram, and `scripts/lifecycle.ts`.
 3. The **app** should be a thin overlay on the platform's SDK or starter, not something you write
    from scratch. A demo directory is: prompt + tools + knowledge + provisioning scripts + docs.

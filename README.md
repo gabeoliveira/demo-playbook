@@ -18,7 +18,9 @@ employer, by design.
 
 | Path | What it is |
 |---|---|
-| [`CLAUDE.md`](CLAUDE.md) | Drop-in user-level instructions: who I am, how I like to work, the non-negotiables. |
+| [`CLAUDE.md`](CLAUDE.md) | Drop-in user-level instructions for Claude Code: who I am, how I like to work, the non-negotiables. |
+| [`AGENTS.md`](AGENTS.md) | The same rules, agent-neutral. Devin (and other tools that read `AGENTS.md`) loads it as an always-on rule. |
+| [`.claude-plugin/`](.claude-plugin/) · [`.devin-plugin/`](.devin-plugin/) | Plugin manifests for Claude Code and Devin. Same name and version, enforced by the check script. |
 | [`skills/build-demo/`](skills/build-demo/SKILL.md) | `/build-demo`: the demo driver (story arc, draft-first process, deliverables, SETUP spec). |
 | [`skills/frame-poc/`](skills/frame-poc/SKILL.md) | `/frame-poc`: the 7-tab POC framework plus metric-trap reframes, and the smaller feasibility-spike variant. |
 | [`reference/principles.md`](reference/principles.md) | The guardrails: rules that each started as a real correction. |
@@ -28,6 +30,7 @@ employer, by design.
 | [`PRODUCT_MAP.md`](PRODUCT_MAP.md) | Capability → product slots. **Fill during onboarding.** |
 | [`templates/`](templates/) | DEMO_SCRIPT, SETUP, sequence diagram, POC tabs, PLATFORM_NOTES, and a generic `lifecycle.ts` stage runner. |
 | [`memory/working-style.md`](memory/working-style.md) | Preferences and lessons to seed a fresh Claude memory. |
+| [`scripts/check-plugin.ts`](scripts/check-plugin.ts) | `node scripts/check-plugin.ts`: manifests in sync, skills portable (no `${CLAUDE_PLUGIN_ROOT}` paths, every mentioned file exists), non-negotiables identical in both instruction files. Runs in CI. |
 
 ## Install on a new machine
 
@@ -50,6 +53,24 @@ Then, inside Claude Code:
 Seed the new memory: open a session and say *"Read ~/demo-playbook/memory/working-style.md and
 save the relevant parts to memory."*
 
+### In Devin
+
+Devin reads the same `skills/` folder and its own manifest in `.devin-plugin/`. `AGENTS.md` comes along
+as an always-on rule, so there's nothing to copy by hand.
+
+```bash
+devin plugins install gabeoliveira/demo-playbook        # personal scope, from GitHub
+devin plugins install --local ~/demo-playbook           # or a local checkout, this machine only
+```
+
+In the Devin app: **Settings → Plugins → Add plugin → From repository**, then `gabeoliveira/demo-playbook`.
+An org admin can install it at organization scope instead. Devin must be able to reach the repo
+through your Git integration. The skills show up as `/demo-playbook:build-demo` and
+`/demo-playbook:frame-poc`.
+
+Skill files refer to the playbook's files by their path from the plugin root (`reference/…`,
+`templates/…`, `PRODUCT_MAP.md`), so the same text works in both tools.
+
 ## First week on a new platform
 
 1. **Fill [`PRODUCT_MAP.md`](PRODUCT_MAP.md).** For each capability, record the product that
@@ -70,4 +91,6 @@ When a demo teaches you something that would have saved an hour, add it the same
 - A rule that holds on any platform goes in `reference/principles.md`.
 - A process change goes in the relevant `SKILL.md`.
 
-Then bump `version` in `.claude-plugin/plugin.json`. The point is that the work compounds.
+Then bump `version` in **both** `.claude-plugin/plugin.json` and `.devin-plugin/plugin.json`, and run
+`node scripts/check-plugin.ts` (CI runs it too). If you change a non-negotiable, change it in both
+`CLAUDE.md` and `AGENTS.md`. The point is that the work compounds.

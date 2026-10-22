@@ -10,10 +10,13 @@ section doesn't feed the verdict, cut it.
 
 ## Load first
 
-- `${CLAUDE_PLUGIN_ROOT}/reference/principles.md`: §H (metric traps) and §I (language). Apply §H
+Paths in this file are relative to the plugin's root folder: two levels up from this file.
+In Claude Code that folder is `${CLAUDE_PLUGIN_ROOT}`. In Devin, it's the installed plugin's folder.
+
+- `reference/principles.md`: §H (metric traps) and §I (language). Apply §H
   **before** writing the Charter.
-- `${CLAUDE_PLUGIN_ROOT}/PRODUCT_MAP.md`: the products whose criteria you'll write.
-- `${CLAUDE_PLUGIN_ROOT}/templates/poc-tabs.template.md`: a skeleton for all 7 tabs.
+- `PRODUCT_MAP.md`: the products whose criteria you'll write.
+- `templates/poc-tabs.template.md`: a skeleton for all 7 tabs.
 
 ## Pick the size before writing anything
 
