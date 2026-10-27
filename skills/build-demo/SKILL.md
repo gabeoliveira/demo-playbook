@@ -1,6 +1,6 @@
 ---
 name: build-demo
-description: Build a conversational-AI customer demo the proven way. Fit the customer's use case into the one-story arc (recognized customer → grounded answer → real action → continuity moment → insight close), drive the build draft-first (propose, don't interrogate), and ship the deliverables that make it runnable by a teammate and rebuildable in ~30 min. Those are a sequence diagram, demo script, SETUP.md, customer recipe page, and provision/teardown scripts, plus companions when the situation calls for them (architecture board, customer-language journey walkthrough, builder prompts for the platform's AI or no-code builder). Use when someone wants to build, plan or prepare a demo of an AI agent for a customer. NOT for POCs (use frame-poc).
+description: Build a conversational-AI customer demo the proven way. Fit the customer's use case into the one-story arc (recognized customer → grounded answer → real action → continuity moment → insight close), drive the build draft-first (propose, don't interrogate), and ship the deliverables that make it runnable by a teammate and rebuildable in ~30 min. Those are a sequence diagram, demo script, SETUP.md, customer recipe page, and provision/teardown scripts, plus companions when the situation calls for them (architecture board, customer-language journey walkthrough, builder prompts for the platform's AI or no-code builder, branded session plan). Plans the session in 15, 30, 60 or 120-minute formats: the live journey first, then the platform's dashboard in a fixed priority order. Use when someone wants to build, plan or prepare a demo of an AI agent for a customer. NOT for POCs (use frame-poc).
 ---
 
 # Build a demo
@@ -21,11 +21,15 @@ In Claude Code that folder is `${CLAUDE_PLUGIN_ROOT}`. In Devin, it's the instal
 4. `reference/prompt-skeleton.md` when you reach step 5.
 5. `reference/production-path.md` when the agent must reach production, or when
    the platform has an AI builder (step 6).
+6. `reference/demo-formats.md` when you reach step 2: the 15/30/60/120-minute formats and the
+   dashboard ladder.
 
 ## The shape (never skip)
 
 A demo that lands is **one customer journey of about 10 minutes**, where each product plays a
-distinct role:
+distinct role. That journey is rung 1 of every format in `reference/demo-formats.md`: compressed
+to ~7 minutes in the 15-minute format, and full in the 30-minute format and up. The time box
+changes how much of the platform you open up after the journey, never the story itself.
 
 | # | Beat | What the audience learns | Time |
 |---|---|---|---|
@@ -74,10 +78,14 @@ People lose time staring at empty fields. Ask only what only they know, then han
    - the ONE self-service action that moves their P&L (beat 3)
    - the regulator
    - the system of record
+   - **the session length (15, 30, 60 or 120 minutes) and who's in the room**. This picks the
+     format.
 
    Then **write the one-paragraph journey yourself** and let them correct it. If you can't write
    one paragraph, ask one more question.
-2. **Arc.** Draft a minute-by-minute run sheet fitted to the shape. They move or cut beats.
+2. **Arc.** Draft a minute-by-minute run sheet for the chosen format (`reference/demo-formats.md`):
+   the journey fitted to the shape, then the dashboard ladder rungs that fit the time box, each
+   with one line of why it matters to this customer. They move or cut beats and rungs.
 3. **Persona and tone.** Offer 2–3 short persona names plus a 3-bullet tone dial:
    - formal/regulated → precise and low-warmth
    - retail → warm and direct
@@ -138,8 +146,11 @@ The user should be editing and rejecting, never writing from blank.
 8. **Builder prompts** whenever the platform has an AI builder (required then, because they're how
    the agent gets built), or a no-code recreation when the demo should be rerunnable without the
    code. Both state the deltas honestly.
+9. **Session plan** whenever the customer gets an agenda before the session. It's one page in the
+   customer's language with the format, the minute-by-minute agenda and what they'll see on
+   screen, rendered with the company's brand tooling (PRODUCT_MAP "Brand and branded artifacts").
 
-Specs for 6–8 are in `reference/artifacts.md`.
+Specs for 6–9 are in `reference/artifacts.md`.
 
 ## Mermaid: it MUST render
 

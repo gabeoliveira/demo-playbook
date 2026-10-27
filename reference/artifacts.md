@@ -126,3 +126,30 @@ Map each custom tool to the nearest built-in and **state the delta**. When the w
 reproduce, name it and flip the arc. Don't imitate it.
 
 Mirror whichever of 4a/4b exists into the recipe page (section 8).
+
+## 5. Session plan (customer-facing, in the CUSTOMER'S language, branded)
+
+Send it when the session is booked, so the customer knows the format and what they'll see. One
+page. It's the customer's version of the presenter's DEMO_SCRIPT, and it never carries internal
+notes, fallbacks or timings for us.
+
+1. **Title and format:** the customer, the use case, and "15 / 30 / 60 / 120 minutes"
+   (`reference/demo-formats.md`).
+2. **What you'll see:** the journey in two or three sentences, in the customer's own terms, with
+   the persona and the moment that matters most to them.
+3. **Agenda:** a minute-by-minute table, with the journey first and then the dashboard rungs the
+   format covers. Each rung gets one line on why it matters to this customer.
+4. **Who should join:** the roles the format serves best, for example CX leadership at 30 minutes,
+   plus engineering and compliance at 60 or 120.
+5. **What we need from you:** only what only they can provide, such as a policy to confirm or a
+   hands-on login for the deep-dive.
+6. **After the session:** the next step and when it happens.
+
+Rules:
+- **The customer's language, the company's brand.** Write the copy with the company's brand skill
+  (product names, voice, writing rules), then render it with its brand tooling as HTML or PDF.
+  PRODUCT_MAP "Brand and branded artifacts" names both. Use real product names only.
+- **Only promise what the format covers.** If the agenda says Tools, the format must include rung 5.
+- **No invented dialogue or numbers.** Describe what they'll see. Quote lines only from smoke tests
+  (principles §I), and use metrics only from approved customer references.
+- Publish it as an artifact when possible, otherwise write it to `docs/session-plan.html` (or `.pdf`).

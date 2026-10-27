@@ -65,8 +65,15 @@ ahead: these are defaults, not locks.
   tool call. A turn that calls a tool adds the round-trip plus the model's continuation time.
   Instrument each stage: end of speech → final ASR → first LLM token → tool returned → first token
   after the tool → first TTS audio. Otherwise "voice is slow" turns into a ghost hunt.
-- **Use a backchannel.** The agent says a bridge phrase ("Let me check that…") before slow tools,
-  so perceived silence stays short even when real latency doesn't.
+- **Use a backchannel.** The agent says a bridge phrase before slow tools, so perceived silence
+  stays short even when real latency doesn't. Make it name what's being checked ("I'm pulling up
+  the Caballito slots"), and only while a tool is actually running. Platforms often ship a rule
+  against empty "one moment" promises, and a generic bridge collides with it.
+- **Every tool whose output gets spoken returns speech-ready fields.** Amounts in words with the
+  currency named, dates as speech, reference ids grouped for reading aloud. Do this on every path
+  that reaches a voice turn, including profile lookups, not just the action tools. *Why:* a
+  callback recap read a raw `85810000` from the one tool that didn't have a spoken field, and
+  non-English voice models read long figures badly.
 - **A faster model doesn't mean smoother voice.** Streaming cadence (variance between tokens,
   punctuation) drives stutter more than raw speed. Buffer at clause or sentence boundaries, and
   pin the smoother model for voice. A cheaper model is fine for messaging.
@@ -107,6 +114,10 @@ ahead: these are defaults, not locks.
 - **Tag every write with a `source` like `{brand}-{flow}`.** That tag is your cleanup filter.
   Seeds get `*-seed` so sweeps can skip them.
 - **Reuse one canonical test persona** (phone, name, email) and document it in `PERSONA.md`.
+- **Keep demo memory where a script can purge it.** If the platform's memory layer can't be
+  cleared by an admin API (only from inside the agent's own tools), don't put it in the demo path:
+  hold the persona's history in the simulated system of record, which reset clears in one call, and
+  say on the recipe page what production would use instead.
 
 ## E. Shared environments: safety
 
@@ -118,7 +129,14 @@ ahead: these are defaults, not locks.
   markers.
 - **Inventory before the first write.** On any account you didn't create, start with a read-only
   inventory of what's there, and save it with the demo. It's the record of what "pre-existing"
-  means, and the input to the conflict check.
+  means, and the input to the conflict check. **Count the caps too:** for every per-account limit,
+  record the limit and how much of it is already used, because pre-existing resources count
+  against it. *Why:* a monitor cap of 4 was hit after three of ours, because the account already
+  had one.
+- **Platform-managed rules can contradict yours.** Before adding your own guidelines or rules, ask
+  the builder (or read the config) for conflicts with the managed and default ones, and quote both
+  texts. Adapt yours. If a managed rule breaks the customer's locale or regulation and can't be
+  worked around on our side, that's a change to someone else's resource: ask its owner (below).
 - **Select cleanup targets by markers *we* put there**: our ids, our webhook URLs, our source
   tags, our name prefix. **Never select by "it uses my number or sender."** On a shared account
   that is never true. A real incident: a reset closed dozens of other teams' conversations, and
@@ -141,6 +159,21 @@ ahead: these are defaults, not locks.
 - **Liveness-check every id before trusting it.** Ids in `.env` go stale after a teardown or
   external cleanup; their presence proves nothing.
 - **Make provisioning idempotent.** Re-running after a failure skips completed stages.
+- **Validate before the first write, and keep partial ids.** Check every name, character set and
+  count locally before creating anything; if a stage fails halfway, write the ids it did create to
+  `.env` before re-throwing, so teardown can find them. *Why:* one rejected character in a name
+  prefix, then one cap, each stopped a provisioning run halfway through.
+- **Mark each provisioned resource required or optional.** At a cap, provisioning skips the
+  optional ones with a warning and fails only when a required one can't be created. Never make
+  room by deleting someone else's resource.
+- **A simulated system of record that keeps state in memory runs as one always-on instance.** No
+  auto-stop, no second machine, no autoscaling: a stopped instance wipes the demo's rows and a
+  second one splits them. Say in SETUP that a restart reseeds, so config changes happen before
+  `reset`, never mid-demo.
+- **Plan for an agent that can't touch `.env`.** Many orgs block AI tools from env files by
+  managed policy. Scripts must fail with a plain-language message naming the missing variable and
+  where its value comes from, and `check:env` lists what's missing without printing values. The
+  human edits `.env`; never route around the policy with a differently named file.
 - **Retry health checks.** A destroyed and recreated app can sit behind stale DNS for minutes.
 - **Deleted resource names can stay reserved for a while.** Auto-suffix on a name conflict.
 - **Teardown is dry-run by default** and deletes only **account-limited** resources, the ones
@@ -216,6 +249,14 @@ ahead: these are defaults, not locks.
 - **Localize the deliverable and the grammar together.** Example: in Portuguese, "POC" is
   feminine (*a POC, da POC, esta POC*) because it stands for *prova de conceito*. Check acronym
   gender and agreement in every gendered language.
+- **Locale formatting is load-bearing.** Check the platform's default formatting and language
+  rules against the customer's locale on day one: thousands and decimal separators, currency
+  symbol, date order, "reply in the user's language" defaults. *Why:* a default rule would have
+  shown an Argentine bank "$85,810,000.00"; in Argentina the comma is the decimal separator.
+- **Verify research quotes before they reach anything the customer sees.** A quote, date or
+  figure that a research pass got only from a search snippet (it couldn't open the page) stays out
+  of scripts and slides until a human has read the source. *Why:* an unverified line attributed to
+  the customer's own head of channels nearly became the demo's closing line, in front of him.
 
 ## J. Reject on sight (quick table)
 
@@ -231,4 +272,5 @@ ahead: these are defaults, not locks.
 | "Just ask the AI builder to make the agent from a chat description." | Prompt it from the written spec, with a conflict check and a human diff review (production-path §2). | An unreviewed generation can't be reproduced, diffed or audited. |
 | "Show the dashboard numbers, they look real." | Label seeded history as synthetic on stage (§D). | The first follow-up question exposes it, and trust goes with it. |
 | "Just tweak their existing guidelines so ours fit." | Add ours and adapt ours (§E: additive only). | It isn't our config to change, and an edit there quietly changes every other flow that uses it. |
+| "Quote what their exec said in the press, the research found it." | Read the source first; snippet-only quotes stay out (§I). | A misattributed quote, said to the person it's attributed to, ends the meeting. |
 | "Bulk-close everything on the shared sender." | Select by our own markers, with a named target. | §E: closed is final, and other teams live there too. |

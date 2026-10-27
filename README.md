@@ -25,7 +25,8 @@ employer, by design.
 | [`skills/frame-poc/`](skills/frame-poc/SKILL.md) | `/frame-poc`: the 7-tab POC framework plus metric-trap reframes, and the smaller feasibility-spike variant. |
 | [`reference/principles.md`](reference/principles.md) | The guardrails: rules that each started as a real correction. |
 | [`reference/prompt-skeleton.md`](reference/prompt-skeleton.md) | Annotated system-prompt skeleton. |
-| [`reference/artifacts.md`](reference/artifacts.md) | Specs for the recipe page, architecture board, journey walkthrough and builder prompts (production build and no-code recreation). |
+| [`reference/artifacts.md`](reference/artifacts.md) | Specs for the recipe page, architecture board, journey walkthrough, builder prompts (production build and no-code recreation) and the branded session plan. |
+| [`reference/demo-formats.md`](reference/demo-formats.md) | 15, 30, 60 and 120-minute formats: the live journey first, then the dashboard ladder (agent experience → AI builder → analytics → guardrails and guidelines → tools → rest of platform). |
 | [`reference/production-path.md`](reference/production-path.md) | From a written spec to a live agent: route each artifact deterministically, the gates, publish at 0% and ramp, rollback. |
 | [`PRODUCT_MAP.md`](PRODUCT_MAP.md) | Capability → product slots. **Fill during onboarding.** |
 | [`templates/`](templates/) | DEMO_SCRIPT, SETUP, sequence diagram, POC tabs, PLATFORM_NOTES, and a generic `lifecycle.ts` stage runner. |

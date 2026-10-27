@@ -3,8 +3,9 @@
 Persona: **<<PersonaName>>** (<<role, brand>>). Customer: **<<Customer Name>>**
 (<<segment, key account facts the story leans on>>). Language: <<locale>>.
 
-**Total: ~10 min** (beat 1 ≈ <<x>> min · beat 2 ≈ <<x>> min · beat 3 ≈ <<x>> min ·
-beat 4 ≈ <<x>> min · insight close ≈ <<x>> min).
+**Format: <<15 | 30 | 60 | 120>> min** (reference/demo-formats.md). Journey ≈ <<x>> min (beat 1 ≈ <<x>> ·
+beat 2 ≈ <<x>> · beat 3 ≈ <<x>> · beat 4 ≈ <<x>> · insight close ≈ <<x>>) · dashboard ladder ≈ <<x>> min ·
+Q&A ≈ <<x>> min.
 
 ## Pre-flight (presenter checklist)
 
@@ -72,6 +73,40 @@ Walk through: summary · sentiment · adherence · <<custom score that fits the 
 > Closing line: "<<the business outcome in one sentence>>"
 
 ---
+
+## Dashboard segment (the ladder, in order; keep only the rungs your format covers)
+
+Show each rung through the journey's own conversation where you can. Running long? Cut from the
+bottom up.
+
+### Rung 2: <<AI builder / self-improvement>> (~<<x>> min)
+
+**Why it matters to <<customer>>:** <<one line>>
+
+**Show:** <<the live ask or edit, the proposed change and its diff, the validation result>>
+
+> Narration: "<<…>>"
+
+### Rung 3: <<Analytics>> (~<<x>> min)
+
+**Why it matters:** <<one line>> · **Show:** <<insights by intent, the journey's signals at volume,
+one QA finding>> · Seeded history labeled as synthetic? <<yes/no>>
+
+### Rung 4: <<Guardrails and guidelines>> (~<<x>> min)
+
+**Why it matters:** <<one line>> · **Live line:** `<<the adversarial message>>` → **Expected:**
+<<refusal + where it's logged>>
+
+### Rung 5: <<Tools>> (~<<x>> min)
+
+**Why it matters:** <<one line>> · **Show:** <<one tool's code, tests, where it's versioned>>
+
+### Rung 6: <<Rest of the platform>> (~<<x>> min)
+
+**Show:** <<knowledge, memory, versioning and rollout, voice configuration, APIs: pick what this
+audience asked about>>
+
+> **Close (30 s):** "<<the business outcome in one sentence, and the next step>>"
 
 ## If something goes wrong
 
