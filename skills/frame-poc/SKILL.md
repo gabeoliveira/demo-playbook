@@ -12,6 +12,7 @@ section doesn't feed the verdict, cut it.
 
 Paths in this file are relative to the plugin's root folder: two levels up from this file.
 In Claude Code that folder is `${CLAUDE_PLUGIN_ROOT}`. In Devin, it's the installed plugin's folder.
+If this skill is loaded through a symlink (e.g. from `~/.config/devin/skills/`), the plugin root is `~/demo-playbook/`.
 
 - `reference/principles.md`: §H (metric traps) and §I (language). Apply §H
   **before** writing the Charter.

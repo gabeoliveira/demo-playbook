@@ -1,6 +1,6 @@
 ---
 name: build-demo
-description: Build a conversational-AI customer demo the proven way. Fit the customer's use case into the one-story arc (recognized customer → grounded answer → real action → continuity moment → insight close), drive the build draft-first (propose, don't interrogate), and ship the deliverables that make it runnable by a teammate and rebuildable in ~30 min. Those are a sequence diagram, demo script, SETUP.md, customer recipe page, and provision/teardown scripts, plus companions when the situation calls for them (architecture board, customer-language journey walkthrough, builder prompts for the platform's AI or no-code builder, branded session plan). Plans the session in 15, 30, 60 or 120-minute formats: the live journey first, then the platform's dashboard in a fixed priority order. Use when someone wants to build, plan or prepare a demo of an AI agent for a customer. NOT for POCs (use frame-poc).
+description: "Build a conversational-AI customer demo the proven way. Fit the customer's use case into the one-story arc (recognized customer → grounded answer → real action → continuity moment → insight close), drive the build draft-first (propose, don't interrogate), and ship the deliverables that make it runnable by a teammate and rebuildable in ~30 min. Those are a sequence diagram, demo script, SETUP.md, customer recipe page, and provision/teardown scripts, plus companions when the situation calls for them (architecture board, customer-language journey walkthrough, builder prompts for the platform's AI or no-code builder, branded session plan). Plans the session in 15, 30, 60 or 120-minute formats: the live journey first, then the platform's dashboard in a fixed priority order. Use when someone wants to build, plan or prepare a demo of an AI agent for a customer. NOT for POCs (use frame-poc)."
 ---
 
 # Build a demo
@@ -12,6 +12,7 @@ reference files.
 
 Paths in this file are relative to the plugin's root folder: two levels up from this file.
 In Claude Code that folder is `${CLAUDE_PLUGIN_ROOT}`. In Devin, it's the installed plugin's folder.
+If this skill is loaded through a symlink (e.g. from `~/.config/devin/skills/`), the plugin root is `~/demo-playbook/`.
 
 1. `reference/principles.md`: enforce it throughout and push back when a
    request trips a rule.

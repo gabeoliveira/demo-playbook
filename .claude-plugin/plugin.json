@@ -1,7 +1,7 @@
 {
   "name": "demo-playbook",
   "description": "Build conversational-AI customer demos and POCs the proven way: one-story demo arc, draft-first build, runnable-by-a-teammate deliverables, scripted provision/teardown lifecycle, and the 7-tab decision-producing POC framework. Platform-neutral; fill PRODUCT_MAP.md per stack.",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "author": {
     "name": "Gabriel Oliveira"
   },
