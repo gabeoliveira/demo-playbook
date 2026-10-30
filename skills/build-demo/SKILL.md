@@ -92,6 +92,20 @@ People lose time staring at empty fields. Ask only what only they know, then han
    - retail → warm and direct
    - health → precise and empathetic, never clinical
    - collections → empathetic and firm, no shame
+
+   **If the demo has a voice leg, pick the voice here too, because it's part of the persona.** Do it before the first smoke test.
+   Write a shortlist to `research/voices-<date>.md`: 2–3 voices in the persona's gender and language, plus one backup
+   of the other gender.
+   - **What goes on the shortlist.** Start from the platform's recommended or evaluated voices (PRODUCT_MAP "Voice
+     runtime"). Then check two things for each one: the accent fits the customer's market (ask for neutral or the
+     customer's city), and the voice can't be withdrawn without notice.
+   - **What to record per voice.** Its provider, its ID copied from a source page (never invented), why it fits, and
+     where to audition it.
+   - **The choice belongs to the user.** Nobody can judge a voice from a description, so the user auditions the
+     finalists on the persona's real lines, ideally with a native speaker. Once chosen, the voice goes in SETUP and
+     in the pre-flight checklist.
+   - **Check the voice changes nothing upstream.** Some voices read spelled-out codes, numbers or ALL CAPS badly, so
+     confirm the `*_texto_voz` fields still sound right with the chosen voice (PLATFORM_NOTES).
 4. **Tools.** Draft 3–8 tools, each with a one-line purpose and the system it touches.
    - Almost always: knowledge search and human handoff.
    - Usually: read and write on the system of record, plus a "record customer signal" memory write.

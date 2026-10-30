@@ -84,14 +84,14 @@ Gotchas behind these rows: `PLATFORM_NOTES.md`. "Live" rows were exercised on a 
 
 | Capability | Role in the story | Decagon | Provisioned by | Limited? |
 |---|---|---|---|---|
-| **Agent brain / procedures** | Behavior, procedures, tool selection | Agent Operating Procedures (AOPs, V4) + Guidelines (V1 or V2 per instance) | Duet from a spec (AOPs, V2 Guidelines); public API only for V1 Guidelines | 30 guidelines per workspace |
+| **Agent brain / procedures** | Behavior, procedures, tool selection | Agent Operating Procedures (AOPs, V4) + Guidelines (V1 or V2 per instance) | Duet from a spec, driven by `duet-cli` (AOPs, V2 Guidelines); public API only for V1 Guidelines | 30 guidelines per workspace |
 | **Conversation session** | One id across channels | One conversation per channel; context crosses via call metadata, or User Memory with a shared `user_id` | — | — |
 | **Customer memory / profile** | Recognize, recall, record | User Memory (authenticated users only, tool-written); for demos, the simulated core's history | Tools | 100 KB per user; no admin purge |
 | **Knowledge / grounding** | Verbatim answers | Knowledge (articles / snippets, syncs) | API `POST /article/new` (live) | ≤ 3,000 chars per article |
 | **Tools / actions** | The wow moment | Coded Python 3.11 tools + shared `lib/utils.py`, Secrets | Duet or console | 60 s timeout, 2,000-token output |
 | **Simulated system of record** | Rows that change on screen | Demo backend (Express, in-memory), deployed on Fly.io, one always-on machine | Deployed with the demo | no |
 | **Messaging channels** | Cold open | Chat widget (`data-slug`, signed user id), WhatsApp, SMS, email | Console | WhatsApp/SMS need setup |
-| **Voice runtime** | ASR, TTS, turn-taking | Decagon voice, Spanish supported | Console + Decagon team | provisioned number |
+| **Voice runtime** | ASR, TTS, turn-taking | Decagon voice; voice profiles per language (Build > Customization > Voice), TTS from Cartesia, ElevenLabs or MiniMax. Pick from the profile's **Recommended** voices; others need #tech-support. pt-BR: PLATFORM_NOTES #14b | Console + Decagon team | provisioned number |
 | **Channel-switch mechanism** | Chat → voice | Outbound Voice campaigns (Missions API) with `outbound_reason` + context metadata | API + console campaign | **US recipients only** |
 | **Human handoff** | Escalation with context | Voice: `Conversation.dial_number` warm transfer (spoken summary), SIP; chat: Zendesk / Salesforce / custom escalations | Tools | — |
 | **Agent desktop / context panel** | What the human sees | Warm-transfer summary; ticketing integrations | Tools / integrations | — |
@@ -99,7 +99,7 @@ Gotchas behind these rows: `PLATFORM_NOTES.md`. "Live" rows were exercised on a 
 | **Outcome metrics** | The success-fee meter | Action Trackers (`Conversation.emit_action`) | Console (Duet support undocumented) | not versioned |
 | **Templates / approvals** | Outbound pre-approval | SMS A2P campaign registration | Decagon team | 1–3 weeks |
 | **Hosting** | Where the demo app runs | Fly.io, US region (`sjc`) | `fly deploy --ha=false` | one machine |
-| **AI builder** | Builds from a spec | Duet (Vault `AGENTS.md`, artifacts, Autopilot) | — | — |
+| **AI builder** | Builds from a spec | Duet (Vault `AGENTS.md`, artifacts, Autopilot); `duet-cli` drives it from Claude Code for AOPs, tools, guidelines, guardrails, knowledge, Simulations and analytics, in a named workspace (PLATFORM_NOTES #1d) | `duet-cli` or dashboard | not Action Trackers or AOP-level settings |
 | **Config-as-code and versioning** | Build, publish, ramp, roll back | Agent Versioning (Git-backed workspaces), traffic split | Console | workspace must exist first |
 | **Guardrails** | The guardrail moment | Built-in (Detect Malice, Action Validation, sensitive content, internal leakage) + custom input/output | Duet / console | output guardrails need chat streaming off |
 | **Evals and monitors** | Proof segment | Simulations (personas, checkpoints, tags; scheduled runs use AND on tags) | Duet | — |

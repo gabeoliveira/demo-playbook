@@ -63,6 +63,27 @@ keep their accents. Reference other AOPs by their live, unaccented names.
 
 ### 1d. Driving Duet from a coding agent: `duet-cli`
 
+**Use it for most build operations; it's the default route from Claude Code.** The Duet CLI
+(`@decagon-ai/duet-cli`, beta, also available to customers) gives a coding agent the same Duet the
+dashboard has, against the team's live configuration:
+- AOPs: create, edit, review, and check them against guidelines and policy docs.
+- Tools: read them (declared inputs, secrets, browser flag), scaffold them, fix them.
+- Guidelines, Guardrails and Knowledge: read them, draft them, check for conflicts.
+- Simulations: plan, create, run and analyze them.
+- Conversations and analytics: open a conversation by id, trace what ran, query trends.
+
+Setup: `npm i -g @decagon-ai/duet-cli`, then `duet-cli login` and
+`duet-cli plugins install --harness claude-code`. It also has `teams`, `set-team <exact-name-or-id>`,
+`status`, and `artifacts show|download <id> --team …`. `teams` prints only the first ~20 of 2,000+
+teams, so pass the id to `set-team` instead of searching the list.
+
+**It sees Agent Versioning workspaces.** It lists the team's Git branches, reads tools and AOPs per
+branch, and edits whichever workspace you name ("work in `demo-onfly`"). No workspace is selected
+by default, so always name one. Not covered: settings it can't persist (#1b, #1b-2), and Action
+Trackers (create those in the console, #10).
+**Verified:** 2026-10-29, live (0.6.0, team 5348: three branches listed, six branch tools read with
+their inputs). Capability list from docs-internal "AI tooling" and the Duet Use Case Guide.
+
 `duet-cli ask` (+ `--conversation-id`, `--file`) works for builds, edits and audits, and the
 conversations show up in the dashboard. Gotchas: the active team can reset between calls (run
 `duet-cli set-team` in the same command as a new `ask`); `--thinking-effort extended` can run past 10
@@ -75,6 +96,13 @@ More, from a full build session (2026-10-23):
   fails, sometimes silently with no output. Always run `duet-cli set-team "<team>" && duet-cli ask …`.
 - **Close stdin** (`< /dev/null`) and pipe through `tee`; background runs redirected to a file died
   with exit 137 and no output.
+- **From Claude Code, run `ask` in the foreground** (Bash timeout up to 10 min). A backgrounded
+  `ask` returned nothing on one try and "Could not reach the Decagon API" on another, while the
+  same `ask` in the foreground worked (2026-10-29). The foreground run that worked had one `--file`
+  (request and spec merged into one `.md`); whether two files also work is untested.
+- **Check Duet's V4 claims against the repo's `agent-context/`.** Duet said V4 has no Wait Until or
+  Goto and does not re-evaluate from the top each turn. The team repo's `AGENTS.md` says the agent
+  re-evaluates from the top every turn. Settle it with the first real conversation's Trace View.
 - **Long prompts: use `--file` with a `.md` file.** A long prompt passed as one argument returned
   nothing or died with exit 137. A `.txt` attachment arrives empty ("the attachment seems not to
   have uploaded"); the same text as `.md` works. Smoke-test a new file: ask Duet to quote one line.
@@ -201,6 +229,33 @@ yourself before applying.
 **Fix:** every tool whose output reaches a voice turn returns `*_texto_voz` fields (amounts in
 words with the currency named, dates as speech), including profile lookups.
 **Verified:** Lessons DB (Spanish banking agent, Mexico) + 2026-10-22 build.
+
+### 14b. Brazilian Portuguese voices: takedowns, letter readout, casing
+
+**Symptoms:**
+- An ElevenLabs community voice disappears with no notice. Mercado Libre's pt-BR voice was pulled by its
+  owner on 2026-10-07 ("zero-day licence, no notice"), and calls ran on a failover voice.
+- A Cartesia pt voice reads a standalone lowercase "l" as "litros" when you spell something out (an email,
+  a confirmation code).
+- Cartesia Sonic 3.5 can badly mispronounce words that reach it in ALL CAPS (metadata names, booking codes).
+
+**Fix:**
+- **Prefer Cartesia for pt-BR** or ElevenLabs voices with at least 90 days' notice. In the ElevenLabs voice
+  library, filter on `min_notice_period_days=90`.
+- **Spell codes with Portuguese letter names** in the `*_texto_voz` fields ("ésse, á, zê, quatro, oito"), not
+  bare letters ("S, A, Z").
+- **Normalize casing** before any value reaches a voice turn.
+
+**Known-good voices (2026-10):**
+- Cartesia **Gabriela** `31d80ef2-a540-47c2-9ed3-d6575e27a6c4` is stable and was picked by a Brazilian QA
+  reviewer. Its accent is the "standard Brazilian Portuguese accent (which usually means a soft São Paulo dialect)".
+- Cartesia **Ana Paula** `1cf751f6-8749-43ab-98bd-230dd633abdb` has a more neutral accent.
+- Cartesia **Luana** `700d1ee3-a641-4018-ba6e-899dcadc9e2b` has a slight São Paulo / Minas countryside accent.
+- ElevenLabs **Fernanda** `KHmfNHtEjHhLK9eER20w` is the only female pt-BR voice in Decagon's internal TTS
+  evaluation, where it's Recommended with a 0% failure rate.
+
+**Verified:** Slack (#internal-mercado-libre, #cartesia-decagon, #internal-align-technology), the Notion "TTS
+Multilingual Voices" database, and cartesia.ai/voices/library. Not yet reproduced by us.
 
 ### 15. Recurring Watchtowers skip the last 24 h
 
