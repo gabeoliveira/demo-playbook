@@ -100,6 +100,27 @@ the selected AOP is the first thing to read, before any tool output.
 instance with AOPs you didn't build: shared demo instances, and customer POC instances with a
 live agent. Related: #1e (a contextless message selects nothing).
 
+### 1g. A coded If that can't evaluate skips its branch without telling anyone
+
+**Symptom:** a workflow step after an If never runs, and nothing in the conversation shows a
+problem: the agent carries on as if it had (on the SimplePay cert, it told the customer a credit
+was coming, and no credit tool ran). The error is only in Trace View, on the If node:
+`NameNotDefined` or `AttributeDoesNotExist`.
+**Cause:** a coded If is a Python expression, evaluated as written.
+- A bare value (`auto_eligible`) is read as a variable name: `NameNotDefined`.
+- `@tool.response.field`, the form the output-schema docs show, fails on the instance:
+  `AttributeDoesNotExist: Attribute 'response' does not exist`.
+- Without an output schema on the tool, conditions on its fields can't evaluate either.
+**Fix:** write a full comparison as `@tool.field`, with strings in quotes:
+`@check_provisional_credit_eligibility.outcome == "auto_eligible"`, `@verify_account_holder.locked_out == True`.
+Give the tool an output schema first. For a tool whose code depends on conversation state (a
+verified customer), an editor test run only returns its error shape, so **write the schema by
+hand** (the editor allows it) listing every field the conditions use. An If inside a workflow
+*can* read a tool that ran before the workflow started. Check every If node in Trace View on the
+first smoke test.
+**Verified:** 2026-11-03, live (SimplePay cert instance, AOP V4 workflow) · **Scope:** every coded
+If and Wait Until in AOP V4 bodies and workflows. Docs feedback sent on the `.response.` form.
+
 ### 1d. Driving Duet from a coding agent: `duet-cli`
 
 **Use it for most build operations; it's the default route from Claude Code.** The Duet CLI
