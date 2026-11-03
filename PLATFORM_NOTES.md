@@ -325,6 +325,26 @@ Multilingual Voices" database, and cartesia.ai/voices/library. Not yet reproduce
 rehearse at least a day ahead.
 **Verified:** docs.
 
+### 15b. Synthetic conversations for a Watchtower: create them with metadata, then upload into them
+
+**Symptom:** `POST /conversation/upload` (new conversation) works, but tagging it afterwards with
+`POST /conversation/update_metadata` returns HTTP 500 "Internal server error", every time. We
+retried five times over about 45 s, so it isn't a race. Without a marker you can't scope the
+Watchtower filter to your set, or tell your conversations apart from everyone else's on a shared
+instance.
+**Cause:** unknown (server error). `update_metadata` doesn't seem to support conversations created
+by upload. Separately, `update_metadata` only accepts keys starting with `decagon_ext_`, and values
+limited to `[A-Za-z0-9_-]`.
+**Fix:** create each conversation first with `POST /conversation/new_by_api_key` (`user_id`,
+`flow_id`, `metadata` with your marker; no prefix needed), then `POST /conversation/upload` with
+that `conversation_id` and the messages. Take `flow_id` from an export of a real conversation on
+the instance (`config.flow_id`; a voice flow ID worked). Record each ID in a local manifest before
+filling it, and tear down from that manifest only. The Watchtower then filters on your metadata
+key (Metadata filter, OR with the key your own tools set on live conversations). Uploaded
+conversations have no audit logs, so write flag criteria that also work from the transcript alone.
+**Verified:** 2026-11-03, live (11 conversations) · **Scope:** API-key auth; a docs feedback
+report was sent on the 500.
+
 ### 16. Smaller notes (docs, not yet reproduced)
 
 - Knowledge articles over 2,200 characters are accepted with a warning; hard max 3,000.
