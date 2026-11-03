@@ -40,7 +40,11 @@ conditions and channel toggles survived a Duet apply on 2026-10-23). In the UI t
 AOP's ⋯ menu: **Channel visibility >** (toggles) and **Experiment & AOP selection** (When to use,
 When not to use, Force AOP selection). Guardrail actions aren't shown in
 Duet's listing either: check them in Build > Guardrails.
-**Verified:** 2026-10-23, live (dashboard and `duet-cli ask`).
+**Trap in the Git file:** Duet writes entry conditions to `aop_json.allow_conditions`, the copy *inside* the
+body, and still reports them "saved". The editor doesn't show that copy. The fields that count are the
+**top-level** `allow_conditions` / `block_conditions` / `is_visible` in `aops/generated/<AOP>.json`, so check those,
+not the nested ones (2026-10-30: Duet's nested list had 4 entries while the top-level field was `null`).
+**Verified:** 2026-10-23, live (dashboard and `duet-cli ask`); Git trap 2026-10-30.
 
 ### 1b-2. Duet-created guardrails have no action, and the form may not save one
 
@@ -61,6 +65,41 @@ looked at `main`/production and reported "none"; name the branch explicitly.
 keep their accents. Reference other AOPs by their live, unaccented names.
 **Verified:** 2026-10-23, live.
 
+### 1e. AOPs are selected before their tools run: a contextless return message selects nothing
+
+**Symptom:** in a new conversation, a short message that continues an earlier one ("Caiu a ligação. Deu
+certo?") selects no AOP. No tool runs, so even metadata the AOP would use (the phone number) is never looked
+up, and the agent answers generically: "Não tenho registro de nenhuma ligação…".
+**Cause:** AOP selection reads only the message and the AOP's entry conditions (When to use / When not to
+use). The identify-by-phone step is inside the AOP, so it can't help choose the AOP. A condition like "the
+traveler comes back to ask whether today's problem was solved" doesn't match a message that names no topic.
+**Fix:** add a When to use entry for short return messages, by hand in the editor (see #1b: Duet doesn't save entry conditions), with examples ("caiu a ligação", "deu certo?",
+"conseguiu resolver?"). Smoke-test the continuity beat in a **new** conversation, never in the same one.
+**Verified:** 2026-10-30, live (Onfly, team 5348; the trace showed no AOP step log and no tool calls).
+
+### 1f. On a shared instance, a pre-existing AOP can win selection, and your AOP's rules never run
+
+**Symptom:** your new AOP is built and its tools pass, but a live call behaves as if it isn't
+there: it reaches the "wrong" transaction, mentions data that isn't in your mock, or transfers on
+a request your AOP was meant to handle. No tool of yours appears in Trace View.
+**Cause:** the agent picks an AOP on **every turn** from entry conditions, and a pre-existing AOP
+with overlapping conditions can win. Two cases on the SimplePay cert instance: **Transaction
+Disputes V4** (theirs) beat our OPS-114 AOP to "somebody took money off my card", so it ran its
+own tools and data; **Escalation Request V4** took a bare first message "Agent." and transferred,
+because our "offer once, transfer on the second ask" rule lives inside our AOP, and an AOP's rules
+only apply once that AOP is selected. Sharpening your own entry conditions doesn't fix it reliably
+while both AOPs are active.
+**Fix:** on your own branch only, turn the competing AOP's channel visibility off (AOP ⋯ menu >
+Channel visibility), after screenshotting its settings so you can restore them. Production and
+other branches are untouched; never promote the branch. Where you'd rather keep theirs (an
+escalation AOP), move the scripted moment to a turn where your AOP is already active, and phrase
+it so your topic stays the main intent ("can't I talk to a person about this charge?"). Then run
+**Optimize AOPs** for any other overlap, and check **turn 1 of every smoke test in Trace View**:
+the selected AOP is the first thing to read, before any tool output.
+**Verified:** 2026-11-03, live (SimplePay cert instance, branch `cert-gabriel`) · **Scope:** any
+instance with AOPs you didn't build: shared demo instances, and customer POC instances with a
+live agent. Related: #1e (a contextless message selects nothing).
+
 ### 1d. Driving Duet from a coding agent: `duet-cli`
 
 **Use it for most build operations; it's the default route from Claude Code.** The Duet CLI
@@ -68,7 +107,9 @@ keep their accents. Reference other AOPs by their live, unaccented names.
 dashboard has, against the team's live configuration:
 - AOPs: create, edit, review, and check them against guidelines and policy docs.
 - Tools: read them (declared inputs, secrets, browser flag), scaffold them, fix them.
-- Guidelines, Guardrails and Knowledge: read them, draft them, check for conflicts.
+- Guidelines and Guardrails: read them, draft them, check for conflicts.
+- Knowledge: **read-only** (search, browse, usage). It can't create an article or snippet (verified
+  2026-10-29), only knowledge syncers. Add a snippet in Build → Knowledge, or use the public API.
 - Simulations: plan, create, run and analyze them.
 - Conversations and analytics: open a conversation by id, trace what ran, query trends.
 
