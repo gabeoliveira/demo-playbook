@@ -121,6 +121,19 @@ first smoke test.
 **Verified:** 2026-11-03, live (SimplePay cert instance, AOP V4 workflow) · **Scope:** every coded
 If and Wait Until in AOP V4 bodies and workflows. Docs feedback sent on the `.response.` form.
 
+### 1h. Tool variable instructions are prompt text: a format you write there reaches the customer
+
+**Symptom:** the agent asks the customer for a value in a machine format ("Date of birth in
+YYYY-MM-DD format"), although neither the AOP nor the guidelines ask for one.
+**Cause:** the model reads a Conversation History variable's instructions when it decides what
+to ask, not only when it fills the value. The `date_of_birth` instruction said "as YYYY-MM-DD".
+**Fix:** describe *what* to pass, never a format the customer could hear: "the date of birth
+exactly as the customer gave it, in any format; the tool normalizes it. Never ask the customer
+for a format." Normalize in the tool's code (dates, spoken digits, ZIP+4). Read every variable
+instruction as if it were a line of the AOP.
+**Verified:** 2026-11-04, live (SimplePay cert instance, Preview chat) · **Scope:** every tool
+variable sourced from Conversation History.
+
 ### 1d. Driving Duet from a coding agent: `duet-cli`
 
 **Use it for most build operations; it's the default route from Claude Code.** The Duet CLI
