@@ -153,3 +153,36 @@ Rules:
 - **No invented dialogue or numbers.** Describe what they'll see. Quote lines only from smoke tests
   (principles §I), and use metrics only from approved customer references.
 - Publish it as an artifact when possible, otherwise write it to `docs/session-plan.html` (or `.pdf`).
+
+## 6. Talk-track page (presenter-only, in the language of the demo)
+
+The presenter's live view of `DEMO_SCRIPT.md`, open on a second screen or a tab next to the demo.
+The script is for preparing and for a teammate who runs the demo; this page is for finding the
+next line in two seconds. Template: `templates/TALK_TRACKS.template.html` (one self-contained
+file, no dependencies, light and dark).
+
+1. **Navigation:** a sticky segment list with minutes, a timeline bar whose widths are the
+   minutes, and keys: number keys jump to a segment, `q` opens Q&A, `/` focuses its filter.
+2. **One card per segment:** a time chip, a one-line "Show:", the talk tracks, the presenter's
+   own lines (what they say or type as the persona, numbered, in monospace), and the cut line.
+3. **Talk tracks colored by audience:** to the room, stakeholder A, stakeholder B, and the
+   proactive competitor point, with a legend at the top. Write each stakeholder's line in their
+   terms, not the same sentence twice.
+4. **Then:** recovery (the line to say plus a symptom → action table), the pivot map, Q&A
+   (collapsible, filterable, 2–3 sentence answers), reactive competitor objections, and a
+   "don't say" chip list.
+5. **Fill-ins highlighted** (`.fill`) for anything still unknown, so nothing unverified gets said.
+
+Rules:
+- **Lines only.** Setup, expected agent behavior, checks and fallbacks stay in the script; the
+  page links back to it.
+- **Sources stay quiet.** A small faded superscript link (`docs↗`, `blog↗`, `internal↗`) at the
+  end of the line it backs up, brightening on hover and opening in a new tab. Never a footnote
+  list, never prose links inside a talk track.
+- **Nothing but the line gets copied.** Hints, tags and source links are unselectable: a label
+  copied along with a scripted line reaches the agent, and its guardrails read it.
+- **Credit what actually ran.** When a line says which layer caught something (a guardrail, a
+  built-in check, a tool), check it against the trace, not the configuration.
+- **It's a copy.** Regenerate it after every script change, and validate it before sending:
+  well-formed HTML, every in-page anchor resolves, every external link opens.
+- Customer-facing quotes come from smoke tests only (principles §I).

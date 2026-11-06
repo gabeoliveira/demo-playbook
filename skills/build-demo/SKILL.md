@@ -164,8 +164,12 @@ The user should be editing and rejecting, never writing from blank.
 9. **Session plan** whenever the customer gets an agenda before the session. It's one page in the
    customer's language with the format, the minute-by-minute agenda and what they'll see on
    screen, rendered with the company's brand tooling (PRODUCT_MAP "Brand and branded artifacts").
+10. **Talk-track page** whenever the session runs 30 minutes or more, or has two or more
+    stakeholders. It's the presenter's live view of `DEMO_SCRIPT.md`: the spoken lines only, one
+    card per segment, colored by audience, with faded source links. Start from
+    `templates/TALK_TRACKS.template.html`. It's a copy, so regenerate it whenever the script changes.
 
-Specs for 6–9 are in `reference/artifacts.md`.
+Specs for 6–10 are in `reference/artifacts.md`.
 
 ## Mermaid: it MUST render
 

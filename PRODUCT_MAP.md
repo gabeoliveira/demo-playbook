@@ -92,7 +92,7 @@ Gotchas behind these rows: `PLATFORM_NOTES.md`. "Live" rows were exercised on a 
 | **Simulated system of record** | Rows that change on screen | Demo backend (Express, in-memory), deployed on Fly.io, one always-on machine | Deployed with the demo | no |
 | **Messaging channels** | Cold open | Chat widget (`data-slug`, signed user id), WhatsApp, SMS, email | Console | WhatsApp/SMS need setup |
 | **Voice runtime** | ASR, TTS, turn-taking | Decagon voice; voice profiles per language (Build > Customization > Voice), TTS from Cartesia, ElevenLabs or MiniMax. Pick from the profile's **Recommended** voices; others need #tech-support. pt-BR: PLATFORM_NOTES #14b | Console + Decagon team | provisioned number |
-| **Channel-switch mechanism** | Chat → voice | Outbound Voice campaigns (Missions API) with `outbound_reason` + context metadata | API + console campaign | **US recipients only** |
+| **Channel-switch mechanism** | Chat → voice | Outbound Voice campaigns (Missions API) with `outbound_reason` + context metadata | API + console campaign | Any E.164 target; omit the US-only country fields for non-US (PLATFORM_NOTES #7) |
 | **Human handoff** | Escalation with context | Voice: `Conversation.dial_number` warm transfer (spoken summary), SIP; chat: Zendesk / Salesforce / custom escalations | Tools | — |
 | **Agent desktop / context panel** | What the human sees | Warm-transfer summary; ticketing integrations | Tools / integrations | — |
 | **Post-conversation insights** | The insight close | Watchtower (flags + categories), Insights, Duet analytics | API `POST /watchtower/job` (live) or Duet | per-instance Watchtower cap; recurring skips last 24 h |

@@ -1,0 +1,241 @@
+<!doctype html>
+<!--
+  Talk-track page: the presenter's live view of DEMO_SCRIPT.md. Spec: reference/artifacts.md §6.
+  - Lines only. Setup, expected agent behavior, checks and fallbacks stay in DEMO_SCRIPT.md.
+  - It's a copy, not the source: regenerate it whenever DEMO_SCRIPT.md changes.
+  - Replace every {{placeholder}} (curly braces here, because <<…>> would parse as an HTML tag). Duplicate a <section class="seg"> per segment, and keep the
+    nav, the timeline (flex = minutes) and the keyboard map in step with the segments.
+  - Audience classes: .aud-a and .aud-b are the two stakeholders, .comp is the competitor point.
+    Rename the legend labels, not the classes.
+  - Sources: a faded superscript link at the end of the line it backs up, never inline prose.
+    Customer-facing lines only quote smoke tests (principles §I).
+-->
+<html lang="{{en}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{Customer}} · Talk tracks</title>
+<style>
+  :root {
+    --bg: #f6f6fa; --card: #ffffff; --ink: #16161d; --muted: #6b6b80; --line: #e4e4f0;
+    --accent: #4f5bd5; --accent-soft: #eceefe;
+    --aud-a: #b4357a; --aud-a-soft: #fbe9f2;
+    --aud-b: #1f6f8b; --aud-b-soft: #e3f2f7;
+    --comp: #a15c00; --comp-soft: #fdf1e0;
+    --you: #2e7d32; --you-soft: #e8f5e9;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12121a; --card: #1b1b26; --ink: #ececf4; --muted: #9a9ab0; --line: #2c2c3c;
+      --accent: #8f97ff; --accent-soft: #26284a;
+      --aud-a: #f28bbf; --aud-a-soft: #3a1f2e; --aud-b: #6fc3df; --aud-b-soft: #17303a;
+      --comp: #f0b25e; --comp-soft: #3a2a14; --you: #7fcf83; --you-soft: #1b301c;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.55 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+  nav { position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 24px 12px 24px 20px;
+        border-right: 1px solid var(--line); }
+  nav .brand { font-weight: 650; font-size: 14px; margin-bottom: 4px; }
+  nav .sub { color: var(--muted); font-size: 12px; margin-bottom: 18px; }
+  nav a { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; border-radius: 6px;
+          color: var(--ink); text-decoration: none; font-size: 14px; }
+  nav a:hover { background: var(--accent-soft); }
+  nav a .t { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  nav .sep { height: 1px; background: var(--line); margin: 10px 8px; }
+  nav .keys { color: var(--muted); font-size: 11px; margin-top: 16px; padding: 0 8px; line-height: 1.6; }
+  kbd { font-family: var(--mono); font-size: 11px; border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+  main { padding: 24px 32px 120px; }
+  header h1 { font-size: 22px; margin: 0 0 4px; }
+  header p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .timeline { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-bottom: 28px;
+              border: 1px solid var(--line); }
+  .timeline a { display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--ink);
+                text-decoration: none; background: var(--accent-soft); border-right: 1px solid var(--card);
+                white-space: nowrap; overflow: hidden; }
+  .timeline a:nth-child(even) { background: var(--card); }
+  .timeline a:hover { background: var(--accent); color: #fff; }
+  section.seg { background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+                padding: 22px 26px; margin-bottom: 22px; }
+  .seg-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .num { font-weight: 700; color: var(--accent); font-size: 15px; }
+  .seg-head h2 { margin: 0; font-size: 20px; }
+  .time { margin-left: auto; font-size: 12px; color: var(--accent); background: var(--accent-soft);
+          border-radius: 999px; padding: 2px 10px; font-variant-numeric: tabular-nums; }
+  .show { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+       margin: 20px 0 8px; font-weight: 600; }
+  .say { position: relative; margin: 10px 0; padding: 12px 16px; border-left: 3px solid var(--accent);
+         background: var(--accent-soft); border-radius: 0 10px 10px 0; font-size: 17px; line-height: 1.6; }
+  .say p { margin: 0 0 8px; } .say p:last-child { margin-bottom: 0; }
+  .say.aud-a { border-color: var(--aud-a); background: var(--aud-a-soft); }
+  .say.aud-b { border-color: var(--aud-b); background: var(--aud-b-soft); }
+  .say.comp { border-color: var(--comp); background: var(--comp-soft); }
+  .tag { display: inline-block; font-size: 11px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase;
+         border-radius: 4px; padding: 1px 6px; margin-right: 6px; vertical-align: 2px; user-select: none; -webkit-user-select: none; }
+  .tag.aud-a { color: var(--aud-a); border: 1px solid var(--aud-a); }
+  .tag.aud-b { color: var(--aud-b); border: 1px solid var(--aud-b); }
+  .tag.comp { color: var(--comp); border: 1px solid var(--comp); }
+  .tag.room { color: var(--accent); border: 1px solid var(--accent); }
+  .fill { background: #fff3a8; color: #3a3000; border-radius: 3px; padding: 0 3px; }
+  @media (prefers-color-scheme: dark) { .fill { background: #5a4d00; color: #fff6c0; } }
+  .src { font-size: 11px; color: var(--muted); text-decoration: none; opacity: .45; margin-left: 4px;
+         vertical-align: super; white-space: nowrap; user-select: none; -webkit-user-select: none; }
+  .src:hover { opacity: 1; color: var(--accent); }
+  .lines { list-style: none; padding: 0; margin: 6px 0; counter-reset: l; }
+  .lines li { counter-increment: l; display: grid; grid-template-columns: 26px 1fr; gap: 6px; padding: 6px 0;
+              border-bottom: 1px dashed var(--line); }
+  .lines li::before { content: counter(l); color: var(--you); font-weight: 700; font-size: 13px; padding-top: 2px; }
+  .lines code { font-family: var(--mono); font-size: 14px; color: var(--you); background: var(--you-soft);
+                border-radius: 5px; padding: 1px 6px; }
+  /* Hints must never be copied with a line: a pasted label reaches the agent (and its guardrails). */
+  .lines .hint { color: var(--muted); font-size: 13px; user-select: none; -webkit-user-select: none; }
+  .note { color: var(--muted); font-size: 13px; margin: 8px 0; }
+  .cut { margin-top: 16px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+  .cut b { color: var(--ink); font-weight: 600; }
+  details.qa { border-top: 1px solid var(--line); padding: 10px 0; }
+  details.qa:first-of-type { border-top: 0; }
+  details.qa summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; gap: 8px; align-items: baseline; }
+  details.qa summary::before { content: "▸"; color: var(--accent); font-size: 12px; transition: transform .15s; }
+  details.qa[open] summary::before { transform: rotate(90deg); }
+  details.qa .say { font-size: 16px; }
+  .search { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line);
+            background: var(--bg); color: var(--ink); font: inherit; margin: 4px 0 8px; }
+  table.rec { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.rec td { border-top: 1px solid var(--line); padding: 8px 6px; vertical-align: top; }
+  table.rec td:first-child { color: var(--muted); width: 36%; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+  .chip { font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); margin: -8px 0 22px; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } nav { display: none; } main { padding: 16px; } }
+  @media print { nav, .timeline, .search { display: none; } .layout { display: block; } section.seg { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="brand">{{Customer}} × {{Company}}</div>
+  <div class="sub">Talk tracks · {{occasion}}</div>
+  <a href="#s1">1 · {{Segment 1}} <span class="t">{{3}}</span></a>
+  <a href="#s2">2 · {{Segment 2}} <span class="t">{{6}}</span></a>
+  <div class="sep"></div>
+  <a href="#recovery">If it goes wrong</a>
+  <a href="#pivots">Pivot map</a>
+  <a href="#qa">Q&amp;A</a>
+  <a href="#comp">Competitor objections</a>
+  <a href="#dont">Don't say</a>
+  <div class="keys"><kbd>1</kbd>–<kbd>2</kbd> jump to segment<br><kbd>q</kbd> Q&amp;A · <kbd>/</kbd> search<br>Full detail: DEMO_SCRIPT.md</div>
+</nav>
+
+<main>
+<header>
+  <h1>Talk tracks</h1>
+  <p>{{~N min of demo + N min of questions, in an N-min slot}}. Lines only: setup, expected behavior and checks live in DEMO_SCRIPT.md.</p>
+</header>
+
+<div class="timeline" aria-label="Running order">
+  <a href="#s1" style="flex:3">1 {{Short name}}</a>
+  <a href="#s2" style="flex:6">2 {{Short name}}</a>
+</div>
+<div class="legend">
+  <span><span class="tag room">Say</span>to the room</span>
+  <span><span class="tag aud-a">{{Stakeholder A}}</span>{{what they care about}}</span>
+  <span><span class="tag aud-b">{{Stakeholder B}}</span>{{what they care about}}</span>
+  <span><span class="tag comp">{{Competitor}}</span>proactive competitive point</span>
+  <span><span class="fill">highlight</span> = fill in before the session</span>
+</div>
+
+<!-- 1 -->
+<section class="seg" id="s1">
+  <div class="seg-head"><span class="num">1</span><h2>{{Segment title}}</h2><span class="time">~{{3}} min · {{channel or "no product yet"}}</span></div>
+  <p class="show">Show: {{the tab or screen, one line}}.</p>
+
+  <h3>{{Moment}} · {{20 s}}</h3>
+  <div class="say"><p>{{A line to the room. Mark anything still unknown as <span class="fill">[like this]</span>.}}</p></div>
+  <div class="say aud-a"><span class="tag aud-a">{{Stakeholder A}}</span>{{The same point, in their terms.}}<a class="src" href="{{https://source}}" target="_blank" rel="noopener" title="{{what the source is}}">{{docs}}↗</a></div>
+  <div class="say comp"><span class="tag comp">{{Competitor}}</span>{{The proactive competitive point, if this segment owns one.}}</div>
+  <div class="cut"><b>Cut:</b> {{what to drop first if you're over time}}.</div>
+</section>
+
+<!-- 2 -->
+<section class="seg" id="s2">
+  <div class="seg-head"><span class="num">2</span><h2>{{Live journey}}</h2><span class="time">~{{6}} min · {{voice / chat}}</span></div>
+  <p class="show">Show: {{tab}}. {{What to narrate while it runs}}.</p>
+
+  <h3>Your lines as {{persona}}</h3>
+  <ol class="lines">
+    <li><span><code>{{exact text the presenter says or types}}</code></span></li>
+    <li><span><code>{{next line}}</code> <span class="hint">{{why this turn matters}}</span></span></li>
+  </ol>
+
+  <h3>After the call</h3>
+  <div class="say aud-b"><span class="tag aud-b">{{Stakeholder B}}</span>{{What they just saw, in their terms.}}</div>
+  <div class="cut"><b>Cut:</b> {{never cut the turn that proves the arc's real action}}.</div>
+</section>
+
+<!-- Recovery -->
+<section class="seg" id="recovery">
+  <div class="seg-head"><span class="num">!</span><h2>If something goes wrong</h2><span class="time">30 s, then move · 2 tries max</span></div>
+  <div class="say"><p>Let me come back to this. I've got a recorded version that shows it cleanly.</p></div>
+  <p class="note">Never say "it usually works", "that's weird", or blame the model, environment or network.</p>
+  <table class="rec">
+    <tr><td>{{Symptom you can see on screen}}</td><td>{{The line to say, then the action (backup tab, skip, recording)}}</td></tr>
+  </table>
+</section>
+
+<!-- Pivots -->
+<section class="seg" id="pivots">
+  <div class="seg-head"><span class="num">↪</span><h2>Pivot map</h2><span class="time">go there, answer with the product, come back</span></div>
+  <table class="rec">
+    <tr><td>{{Stakeholder}}: "{{question}}"</td><td>→ {{segment}}. Return: "{{the bridge back}}"</td></tr>
+  </table>
+</section>
+
+<!-- Q&A -->
+<section class="seg" id="qa">
+  <div class="seg-head"><span class="num">?</span><h2>Questions you'll get</h2><span class="time">2–3 sentences, then stop</span></div>
+  <input class="search" id="qsearch" type="search" placeholder="Filter questions… (press / )" autocomplete="off">
+  <details class="qa"><summary>{{Question}}</summary>
+    <div class="say">{{Answer in 2–3 sentences.}}</div></details>
+</section>
+
+<!-- Competitor -->
+<section class="seg" id="comp">
+  <div class="seg-head"><span class="num">C</span><h2>{{Competitor}} objections (reactive)</h2><span class="time">proactive ones: {{segments}}</span></div>
+  <details class="qa"><summary>"{{Their claim}}"</summary><div class="say comp">{{The reply.}}</div></details>
+</section>
+
+<!-- Don't say -->
+<section class="seg" id="dont">
+  <div class="seg-head"><span class="num">✕</span><h2>Don't say to a customer</h2></div>
+  <div class="chips">
+    <span class="chip">{{internal-only claim or name}}</span>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+  // Keep in step with the segments: number keys jump, q opens Q&A, / focuses its filter.
+  const ids = { "1": "s1", "2": "s2", q: "qa" };
+  const search = document.getElementById("qsearch");
+  document.addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "/") { e.preventDefault(); location.hash = "qa"; search.focus(); return; }
+    if (ids[e.key]) { document.getElementById(ids[e.key]).scrollIntoView(); }
+  });
+  search.addEventListener("input", () => {
+    const q = search.value.trim().toLowerCase();
+    document.querySelectorAll("#qa details.qa").forEach((d) => {
+      const hit = !q || d.textContent.toLowerCase().includes(q);
+      d.style.display = hit ? "" : "none";
+      d.open = !!q && hit;
+    });
+  });
+</script>
+</body>
+</html>
