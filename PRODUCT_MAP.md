@@ -31,7 +31,7 @@ How to fill a row:
 | **Evals and monitors** | Golden-set simulations, QA rubrics, recurring monitors. The proof segment and the production gates. | _TODO_ | | |
 | **Analytics at volume** | Dashboards, intents and charts that need history, and the supported way to seed synthetic history (and delete it by marker). | _TODO_ | | |
 | **Observability** | Where to read the wire when something breaks: event timelines, per-leg errors. | _TODO_ | | |
-| **Brand and branded artifacts** | Customer-facing pages in the company's look and voice: the session plan, the journey walkthrough. | _TODO_ | | |
+| **Brand and branded artifacts** | Customer-facing pages in the company's look and voice: the session plan, the journey walkthrough, the framing slide (from the official deck template). | _TODO_ | | |
 
 ## Dashboard ladder (for the formats in `reference/demo-formats.md`)
 
@@ -105,4 +105,4 @@ Gotchas behind these rows: `PLATFORM_NOTES.md`. "Live" rows were exercised on a 
 | **Evals and monitors** | Proof segment | Simulations (personas, checkpoints, tags; scheduled runs use AND on tags) | Duet | — |
 | **Analytics at volume** | Charts with history | Insights, Action Tracker charts (fill from real runs and Simulations) | — | — |
 | **Observability** | Read the wire | Audit log, Trace View, Agent Workbench | — | — |
-| **Brand and branded artifacts** | Session plan, walkthrough | `decagon-brand` skill (product names, voice, writing rules) + `brand-pdf` skill (renders branded HTML/PDF) | Claude skills | — |
+| **Brand and branded artifacts** | Session plan, walkthrough, framing slide | `decagon-brand` skill (product names, voice, writing rules) + `brand-pdf` skill (renders branded HTML/PDF). Framing slide: copy "Decagon Sales Deck - 2025 Brand Refresh" in Google Slides and keep its "Executive summary" slide (three key numbers) | Claude skills, Google Slides | the deck copy is ~11 MB (all layouts and masters come along) |

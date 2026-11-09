@@ -12,7 +12,7 @@ Q&A ≈ <<x>> min.
 - [ ] `npm run reset` has run (closes sessions, purges runtime memory, reseeds).
 - [ ] The app is up: `<<health URL>>` → `{"status":"ok"}`.
 - [ ] Presenter's phone: <<which app or chat is open, and on which thread>>.
-- [ ] Shared screen tabs, in order: <<system of record>> · <<agent trace / dashboard>> ·
+- [ ] Shared screen tabs, in order: <<framing slide in presenter view (optional, artifacts §7)>> · <<system of record>> · <<agent trace / dashboard>> ·
       <<human desk with an agent logged in>> · <<insights view>>.
 - [ ] Fallback ready for the riskiest beat: <<what you do if it fails>>.
 

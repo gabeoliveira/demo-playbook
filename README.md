@@ -25,11 +25,11 @@ employer, by design.
 | [`skills/frame-poc/`](skills/frame-poc/SKILL.md) | `/frame-poc`: the 7-tab POC framework plus metric-trap reframes, and the smaller feasibility-spike variant. |
 | [`reference/principles.md`](reference/principles.md) | The guardrails: rules that each started as a real correction. |
 | [`reference/prompt-skeleton.md`](reference/prompt-skeleton.md) | Annotated system-prompt skeleton. |
-| [`reference/artifacts.md`](reference/artifacts.md) | Specs for the recipe page, architecture board, journey walkthrough, builder prompts (production build and no-code recreation), the branded session plan and the presenter's talk-track page. |
+| [`reference/artifacts.md`](reference/artifacts.md) | Specs for the recipe page, architecture board, journey walkthrough, builder prompts (production build and no-code recreation), the branded session plan, the presenter's talk-track page and the framing slide. |
 | [`reference/demo-formats.md`](reference/demo-formats.md) | 15, 30, 60 and 120-minute formats: the live journey first, then the dashboard ladder (agent experience → AI builder → analytics → guardrails and guidelines → tools → rest of platform). |
 | [`reference/production-path.md`](reference/production-path.md) | From a written spec to a live agent: route each artifact deterministically, the gates, publish at 0% and ramp, rollback. |
 | [`PRODUCT_MAP.md`](PRODUCT_MAP.md) | Capability → product slots. **Fill during onboarding.** |
-| [`templates/`](templates/) | DEMO_SCRIPT, SETUP, sequence diagram, talk-track page, POC tabs, PLATFORM_NOTES, and a generic `lifecycle.ts` stage runner. |
+| [`templates/`](templates/) | DEMO_SCRIPT, SETUP, sequence diagram, talk-track page, framing slide, POC tabs, PLATFORM_NOTES, and a generic `lifecycle.ts` stage runner. |
 | [`memory/working-style.md`](memory/working-style.md) | Preferences and lessons to seed a fresh Claude memory. |
 | [`scripts/check-plugin.ts`](scripts/check-plugin.ts) | `node scripts/check-plugin.ts`: manifests in sync, skills portable (no `${CLAUDE_PLUGIN_ROOT}` paths, every mentioned file exists), non-negotiables identical in both instruction files. Runs in CI. |
 

@@ -168,8 +168,13 @@ The user should be editing and rejecting, never writing from blank.
     stakeholders. It's the presenter's live view of `DEMO_SCRIPT.md`: the spoken lines only, one
     card per segment, colored by audience, with faded source links. Start from
     `templates/TALK_TRACKS.template.html`. It's a copy, so regenerate it whenever the script changes.
+11. **Framing slide** whenever the session opens with a point of view rather than straight into
+    the product (exec stakeholders, a competitive evaluation). One slide in the customer's
+    language: the moment that hurts, where we'd start and why, and three numbers the customer
+    gave in discovery. Built on the company's official deck. Start from
+    `templates/FRAMING_SLIDE.template.md`.
 
-Specs for 6–10 are in `reference/artifacts.md`.
+Specs for 6–11 are in `reference/artifacts.md`.
 
 ## Mermaid: it MUST render
 

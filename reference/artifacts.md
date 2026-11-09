@@ -186,3 +186,35 @@ Rules:
 - **It's a copy.** Regenerate it after every script change, and validate it before sending:
   well-formed HTML, every in-page anchor resolves, every external link opens.
 - Customer-facing quotes come from smoke tests only (principles §I).
+
+## 7. Framing slide (customer-facing, in the CUSTOMER'S language, branded)
+
+One slide for the first segment, before any product is on screen. It says what the session is
+about and why we'd start there, using the customer's own numbers. Template:
+`templates/FRAMING_SLIDE.template.md` (fill it in first, then build the slide).
+
+1. **Headline:** the moment that hurts, as their customer would say it. Six words at most, and no
+   product name.
+2. **Point of view:** two or three sentences. Where most vendors would start (usually the easy,
+   high-volume intent the customer's current front line already handles), where we'd start
+   instead and why, and what the first contact delivers. Name the painful moment the way the
+   customer's own SOP or team names it.
+3. **"What you told us":** three numbers from discovery, each with a label of five words or fewer.
+4. **Speaker notes:** a shortened copy of the segment 1 talk track (who you are, the three
+   numbers tied to who gave them, the point of view, the competitor question if there is one).
+
+Rules:
+- **Their numbers only.** Every figure comes from the customer in discovery and traces to a note.
+  Confirm what each one counts before it goes up (principle 7). Our own metrics stay off this
+  slide; they belong later, from approved customer references.
+- **No product yet.** No screenshots, logo wall or architecture. This is the scene before the demo.
+- **Start from the company's deck, never from blank.** Copy the official deck template and keep
+  its "three key numbers" style slide (PRODUCT_MAP "Brand and branded artifacts"). Write the copy
+  with the company's brand skill. Work only in your copy; the template stays untouched.
+- **Look at it rendered.** Template text boxes are a fixed size and slide tools don't shrink text
+  to fit, so a label longer than the template's own examples wraps into the edge. Keep labels as
+  short as the examples and check the rendered slide before calling it done.
+- **It's optional on screen.** Segment 1 must work with nothing shared. Link the slide from the
+  script's pre-flight tab list (presenter view) and from segment 1's "Show:".
+- **Keep the Drive clean.** One copy. If a scratch copy is left behind, name it as safe to delete
+  and tell the owner. Don't trash it for them.

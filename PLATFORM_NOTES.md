@@ -140,7 +140,8 @@ variable sourced from Conversation History.
 (`@decagon-ai/duet-cli`, beta, also available to customers) gives a coding agent the same Duet the
 dashboard has, against the team's live configuration:
 - AOPs: create, edit, review, and check them against guidelines and policy docs.
-- Tools: read them (declared inputs, secrets, browser flag), scaffold them, fix them.
+- Tools: read them (declared inputs, secrets, browser flag), scaffold them, fix them. On a
+  Git-backed team, write the tool code in the repo instead and use Duet only to read and dry-run (#5b).
 - Guidelines and Guardrails: read them, draft them, check for conflicts.
 - Knowledge: **read-only** (search, browse, usage). It can't create an article or snippet (verified
   2026-10-29), only knowledge syncers. Add a snippet in Build → Knowledge, or use the public API.
@@ -234,6 +235,23 @@ heads/Staging" (from the instance's GitHub repo).
 instance's repo; a new instance may have no Staging branch.
 **Fix:** create the workspace in Agent Versioning first, then pass its exact name.
 **Verified:** 2026-10-22, live.
+
+### 5b. Git-backed teams: write tool code in the repo, not through Duet
+
+**Symptom:** after Duet or the dashboard applies a tool on a Git-backed team, every run returns
+`None`. The committed file has the right docstring, `__OUTPUT_SCHEMA__` and `@params`, but the
+function body holds a second complete `@params` + `def`, sometimes inside a literal code fence
+(SyntaxError). The inner function is never called.
+**Cause:** the proposal is a whole Git-format file, and the apply pastes it in as the body of the
+existing function.
+**Fix:** clone `decagon-external/<team>`, edit `tools/<name>.py` on the workspace branch following
+the repo's `AGENTS.md`, and push. Keep the existing docstring, schema and `@params`, and replace
+only the body. Then use duet-cli read-only: `get_tool` on the branch to confirm the commit, and
+`run_tool` with `run_metadata` / `mocked_arguments` as the dry-run. `lib/Conversation.py` needs
+Python 3.11+ locally (`typing.NotRequired`); on an older Python, stub `lib` to test.
+**Push:** a plain `git fetch` can fail with "Repository not found" while `gh api` works. Use
+`git -c credential.helper= -c "credential.helper=!gh auth git-credential" push`.
+**Verified:** 2026-11-09, live (team 5490, six tools).
 
 ### 6. Guideline names have a strict character set
 
