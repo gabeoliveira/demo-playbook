@@ -134,6 +134,40 @@ instruction as if it were a line of the AOP.
 **Verified:** 2026-11-04, live (SimplePay cert instance, Preview chat) · **Scope:** every tool
 variable sourced from Conversation History.
 
+### 1i. Outbound: a recipient who speaks first skips the welcome message, and no AOP runs unless forced
+
+**Symptom:** the outbound call is answered with "Alô?" and the agent says "Oi, me deixa carregar aqui pra te atender
+direitinho. Eu sou a Duda… Como posso te ajudar hoje?": an inbound-style opening that never says why it called. A
+silent answer works (the welcome message plays). The audit log shows `Tool preamble generated: …carregar…`, then
+`Loaded AOP: default`.
+**Cause:** outbound calls with `outbound_reason` wait 3 s. If the person speaks, the welcome message is skipped and
+AOP selection runs on that turn. "Alô?" names no topic (same mechanism as #1e), so nothing matches. `default` means
+*no AOP*: it isn't an AOP on the team. The "carregar" sentence is the tool preamble before `load_playbook`. The campaign's
+**AOP to use** didn't select the AOP on that turn, although the campaign page says the call "starts directly in this
+AOP". On a voicemail the AOP was selected, but only because the greeting gave the router something to match.
+**Fix:** on the outbound AOP, set **Force AOP selection** (⋯ > Experiment & AOP selection) to
+`metadata.outbound_reason == "<your_reason>"`, by hand (#1b), then publish. The Get started page asks for this
+("Force Visibility"). Check first that no other AOP on the team forces itself on the same condition. Set it on the
+branch you push from (the workspace), not only on Staging: a later push from a workspace without it can bring back
+the empty value. In the AOP,
+write both openings: "if the welcome message already played, don't repeat the introduction"; "if the person spoke
+first, open with the welcome message's own sentence; never ask how you can help". In every rehearsal, answer one call
+with "Alô?" and one in silence. The audit log should show `Forcing AOP <name>`.
+**Verified:** 2026-11-11, live (Mottu, team 5447, v10, conversation 80e7e127; fixed after Force AOP selection,
+same day) · **Scope:** every outbound voice AOP.
+
+### 1j. Preview → Chat identifies the presenter by a signed login email, not by your mock customer
+
+**Symptom:** in Preview → Chat, the identify step finds nobody (`missing_customer`), although the same tool works on
+voice and with mock metadata.
+**Cause:** a Preview chat has no channel metadata of your own. Its `user_id` is the presenter's login email, with
+`_decagon_has_valid_signature` = `true`, and `_decagon_channel` is absent (`channel_type` = `chat`).
+**Fix:** let the lookup tool also accept the signed email (metadata `user_id` when it contains "@" and the signature
+is valid), and have the demo's back office map that email to the persona. Set it from the reset script
+(`DEMO_CHAT_EMAIL`), so any teammate's login works. Treat a signed login as app authentication; ignore an unsigned
+one. Keep mock metadata as the fallback.
+**Verified:** 2026-11-10, live (Mottu, team 5447).
+
 ### 1d. Driving Duet from a coding agent: `duet-cli`
 
 **Use it for most build operations; it's the default route from Claude Code.** The Duet CLI
@@ -253,6 +287,16 @@ Python 3.11+ locally (`typing.NotRequired`); on an older Python, stub `lib` to t
 `git -c credential.helper= -c "credential.helper=!gh auth git-credential" push`.
 **Verified:** 2026-11-09, live (team 5490, six tools).
 
+### 5c. Teams without Git sync: tool code is a function body
+
+**Symptom:** every tool fails with `ModuleNotFoundError: No module named 'lib.decorators'`.
+**Cause:** the code was saved in the Git-file format (`from lib.decorators import …`, `@params`, `def …`). A team
+without Git sync runs tool code as a function body and has no `lib/decorators.py`.
+**Fix:** keep the Git format as the source of truth for local tests, and generate the platform form from it: no
+decorator, no `def`, inputs by name, `return` at the top level. Configure the inputs on the tool. `Conversation`
+needs no import.
+**Verified:** 2026-11-05, live (Mottu, team 5447).
+
 ### 6. Guideline names have a strict character set
 
 **Symptom:** 400 "Invalid guidelines name. Only alphanumeric, spaces, underscores, dots, and
@@ -276,7 +320,44 @@ clarified. Feedback was sent: say the fields are optional, and that `target` tak
 **Fix:** for non-US recipients, send `target` in E.164 and **omit** `recipient_country_code` and
 `recipient_subdivision_code`. Place one +55 test call in the first smoke test. Keep a US phone as the fallback. Carry
 the chat context in the call's `metadata` (all values strings).
-**Verified:** docs 2026-10-22. PM statement 2026-11-04. A live +55 call is still to do.
+**Collections campaigns (2026-11-09):** the batch API rejects a collections-campaign target without
+`recipient_subdivision_code` (400, "required for collections campaigns"), and that field accepts only US and JM codes.
+So a +55 target can't be added to a collections campaign through the API. **Add +55 targets from the campaign
+screen** (Add recipients > Enter manually): those calls ring and run normally. Keep the API script for a +1 fallback
+phone. Before promising built-in calling-hour rules for a non-US market, ask the PM whether they cover it; otherwise
+use the campaign's business-hours schedules.
+**Verified:** docs 2026-10-22. PM statement 2026-11-04. Live +55 calls from the campaign screen, 2026-11-10 and
+2026-11-11 (Mottu, team 5447).
+
+### 7b. Outbound voice language follows the calling number's voice profile
+
+**Symptom:** the call opens with the pt-BR welcome message, then the agent answers in English, tool preambles
+included.
+**Cause:** the runtime sets `metadata.language` from the voice profile the calling number maps to, and the voice
+flow's managed guideline says to reply in `{{metadata.language}}`. A new number maps to the team's English default.
+Passing `language` in the call metadata doesn't override it.
+**Fix:** map the demo number to a voice profile in the demo's language (Build > Customization > Voice). For a single
+call on an unmapped number, `voice_agent_config_id_override` in the batch request selects a profile.
+**Verified:** 2026-11-05, live (Mottu, team 5447).
+
+### 7c. A campaign's "AOP to use" lists only AOPs in a live production version
+
+**Symptom:** the AOP you built in a workspace doesn't appear in the campaign's **AOP to use** picker.
+**Cause:** the picker resolves against production and lists only AOPs in a published version that has traffic.
+**Fix:** push the workspace to Staging, publish, and ramp the version's traffic if needed (Versioning > Manage
+traffic). Build the campaign after the AOP. To run a workspace on calls before publishing, pin the call destination to
+the workspace branch (Channels > Voice > Call destinations > Agent version).
+**Verified:** 2026-11-05, live (Mottu, team 5447; via Duet).
+
+### 7d. WhatsApp: Meta blocks a US business sender from messaging Brazilian numbers
+
+**Symptom:** the WhatsApp send fails for a +55 recipient from a US production sender, while a US recipient works.
+**Cause:** a Meta restriction on the sender for that destination country. Nothing in the Decagon or Twilio setup changes it.
+**Fix:** for the demo, send the WhatsApp to the presenter's own US number (a separate setting from the phone the call
+rings). For production, use a sender registered in the customer's country.
+**Verified:** 2026-11-09, live (Mottu demo, Twilio production sender).
+
+
 
 ### 8. Agent-output guardrails don't run with chat streaming on
 
@@ -419,6 +500,11 @@ report was sent on the 500.
 - AOP V4 follows numbered steps with transition words better than bullets; reference metadata as
   "the value of the field X is {{metadata.X}}".
 - A tool's description overrides AOP prompting for preambles.
+- In Simulations, unmocked tools that change data are blocked: mock every write tool, or the metrics it records stay
+  empty.
+- Outbound tool templates (Build > Tools > Create tool > Outbound Missions): **Mark Mission Attempt Fulfilled**, **Opt
+  User Out of Mission**, **Mark Mission Attempt Wrong Party**. Rename them with your prefix; their code is Decagon's.
+  When the goal is met outside the call (a payment in the app), the mark-fulfilled batch API stops the redials.
 - The Watchtower API's `filters` is a JSON-encoded string; `"{}"` worked as "no filter" on our
   instance.
 
@@ -432,4 +518,6 @@ report was sent on the 500.
   SMS A2P registration (1–3 weeks).
 - **Reset:** close conversations with `POST /conversation/close` (select by our own recorded ids);
   memory as in entry 9.
-- **Event timeline:** audit log and Trace View per conversation.
+- **Event timeline:** audit log and Trace View per conversation. `GET /conversation/export` returns each
+  conversation's `audit_logs` (tool preambles, the AOP loaded or forced, every tool's inputs and output) and its
+  `agent_version`, so a script can diagnose a call without the dashboard.
